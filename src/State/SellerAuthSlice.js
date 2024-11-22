@@ -8,7 +8,7 @@ export const login = createAsyncThunk(
   "auth/login",
   async (sellerdata, { rejectWithValue }) => {
     try {
-      const token = Cookie.length("token");
+      const token = Cookies.get("token");
       if (!token) {
         console.log("no token in login");
       }
