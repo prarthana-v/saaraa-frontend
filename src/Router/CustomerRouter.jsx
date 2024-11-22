@@ -7,6 +7,7 @@ import Checkout from '../User/components/Checkout/Checkout.jsx'
 import Order from '../User/components/Order/order.jsx'
 import OrderDetails from '../User/components/Order/OrderDetails.jsx'
 import LoginForm from '../User/components/auth/login/login.jsx'
+import RegisterForm from '../User/components/auth/register/register.jsx'
 
 const CustomerRouter = () => {
   return (
