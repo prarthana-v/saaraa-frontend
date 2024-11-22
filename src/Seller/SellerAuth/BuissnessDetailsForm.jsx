@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { TextField, Button, Grid, Typography } from '@mui/material';
+import { TextField, Button, Grid, } from '@mui/material';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
 const BusinessDetailsForm = () => {
   const navigate = useNavigate(); // For redirection
@@ -34,7 +33,7 @@ const BusinessDetailsForm = () => {
     console.log('Business Details:', formData);
 
     // Redirect to Step 3
-    navigate('/register/step-3');
+    navigate('/seller');
   };
 
   return (
@@ -192,6 +191,7 @@ const BusinessDetailsForm = () => {
 
             {/* Submit Button */}
             <Grid item xs={12}  >
+
               <Button
                 variant="contained"
                 color="primary"
@@ -201,6 +201,7 @@ const BusinessDetailsForm = () => {
               >
                 Register As Seller
               </Button>
+
             </Grid>
           </Grid>
         </div>

@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { sellerRegister } from '../../State/SellerAuthSlice';
 
 
 const SellerRegister = () => {
@@ -38,11 +39,12 @@ const SellerRegister = () => {
       return;
     }
     try {
-      const resultAction = await dispatch((formData));
-      if (registerSeller.fulfilled.match(resultAction)) {
+      const resultAction = await dispatch(sellerRegister(formData));
+      console.log();
+
+      if (resultAction.payload.success === true) {
         toast.success('Registration successful!');
         navigate('/seller/register/buisness');
-        // Optionally, redirect the user or reset the form
       } else {
         toast.error(resultAction.payload?.error || 'Registration failed!');
       }

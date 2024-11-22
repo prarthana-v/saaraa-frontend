@@ -80,7 +80,6 @@ const AddProductPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const formDataToSend = new FormData();
-
     Object.keys(formData).forEach((key) => {
       if (key === "images") {
         // Skip images here, handle below
@@ -99,7 +98,7 @@ const AddProductPage = () => {
       formDataToSend.append("images", file);
     });
 
-    console.log("FormData to send:", formDataToSend);
+    console.log("FormData to send:", formData);
 
     dispatch(createProduct(formDataToSend));
     setFormData({
@@ -119,7 +118,7 @@ const AddProductPage = () => {
       manufacturerDetails: "",
       packerDetails: "",
     })
-    navigate('/seller/products')
+    // navigate('/seller/products')
     toast.success("Product added successfully!");
 
   };

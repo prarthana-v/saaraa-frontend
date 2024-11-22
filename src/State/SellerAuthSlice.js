@@ -4,6 +4,23 @@ import axios from "axios";
 const apiurl = import.meta.env.VITE_API_URL;
 import Cookies from "js-cookie";
 
+export const sellerRegister = createAsyncThunk(
+  "seller/register",
+  async (sellerdata, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`${apiurl}/seller/signup`, sellerdata);
+      console.log("seller register", response.data);
+      return response.data; // Expected to include { user, token }
+    } catch (error) {
+      return rejectWithValue(
+        error.response && error?.response?.data?.message
+          ? error.response.data.message
+          : error.message
+      );
+    }
+  }
+);
+
 export const login = createAsyncThunk(
   "auth/login",
   async (sellerdata, { rejectWithValue }) => {
@@ -102,6 +119,18 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(login.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(sellerRegister.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(sellerRegister.fulfilled, (state, action) => {
+        state.seller = action.payload.seller;
+        state.error = null;
+      })
+      .addCase(sellerRegister.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })

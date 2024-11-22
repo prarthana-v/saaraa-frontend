@@ -1,15 +1,15 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 const apiurl = import.meta.env.VITE_API_URL;
-// console.log(apiurl);
-import Cookies from "js-cookie";
+import Cookies from "universal-cookie";
+const cookies = new Cookies();
 
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
   async (_, { rejectWithValue }) => {
     try {
-      const token = Cookies.get("token");
-
+      const token = cookies.get("token");
+      console.log(token, "lll");
       if (!token) {
         console.log("no token");
         throw new Error("Authentication token not found");
@@ -27,6 +27,7 @@ export const fetchProducts = createAsyncThunk(
 
       return response.data;
     } catch (error) {
+      console.log(error);
       return rejectWithValue(
         error.response?.data?.message || "Failed to fetch products"
       );
@@ -39,7 +40,9 @@ export const createProduct = createAsyncThunk(
   "products/createProduct",
   async (productData, { rejectWithValue }) => {
     try {
+      console.log(productData);
       const token = Cookies.get("token");
+      console.log(token, "lll");
       if (!token) {
         console.log("token nathi");
         throw new Error("Token not found. Please log in again.");
