@@ -15,14 +15,14 @@ const ResponsiveSidebar = () => {
   const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
 
   // Logout Function
-  const handleLogout = async () => {
-    try {
-      const result = await dispatch(sellerlogout()).unwrap();
-      console.log(result.message); // Display success message
-    } catch (error) {
-      console.error('Logout failed:', error); // Display the error object
-    }
-  };
+  // const handleLogout = async () => {
+  //   try {
+  //     const result = await dispatch(sellerlogout()).unwrap();
+  //     console.log(result.message); // Display success message
+  //   } catch (error) {
+  //     console.error('Logout failed:', error); // Display the error object
+  //   }
+  // };
   // Sidebar menu items
   const menuItems = [
     { text: 'Dashboard', icon: <Dashboard />, path: '/seller' },
@@ -54,12 +54,12 @@ const ResponsiveSidebar = () => {
           </NavLink>
         ))}
 
-        <ListItem button sx={{ mt: 2, py: 0 }} onClick={handleLogout}>
+        {/* <ListItem button sx={{ mt: 2, py: 0 }} onClick={handleLogout}>
           <ListItemIcon sx={{ color: '#000' }}>
             <Person />
           </ListItemIcon>
           <ListItemText primary="Logout" sx={{ color: '#000' }} />
-        </ListItem>
+        </ListItem> */}
 
       </List>
     </Box >
