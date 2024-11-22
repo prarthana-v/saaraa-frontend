@@ -1,7 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
 import React from 'react'
 import Home from '../User/Pages/Home/Home.jsx'
-import ProductDetails from '../User/components/ProductsDetails/ProductDetails.jsx'
 import Order from '../User/components/Order/order.jsx'
 import OrderDetails from '../User/components/Order/OrderDetails.jsx'
 import LoginForm from '../User/components/auth/login/login.jsx'
@@ -16,7 +15,6 @@ const CustomerRouter = () => {
         <Route path='/register' element={<RegisterForm />} />
         <Route>
           <Route path='/*' element={<Home />} />
-          <Route path='/product/:productId' element={<ProductDetails />} />
           <Route path='/account/order' element={<Order />} />
           <Route path='/account/order/:orderid' element={<OrderDetails />} />
         </Route>

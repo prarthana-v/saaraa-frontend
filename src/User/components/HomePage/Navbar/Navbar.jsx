@@ -168,12 +168,30 @@ const Navbar = () => {
               >
                 Categories
               </Button>
+
               <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleCategoryClose}>
-                <MenuItem onClick={handleCategoryClose}>Men</MenuItem>
-                <MenuItem onClick={handleCategoryClose}>Women</MenuItem>
-                <MenuItem onClick={handleCategoryClose}>Kids</MenuItem>
-                <MenuItem onClick={handleCategoryClose}>Accessories</MenuItem>
+                <MenuItem onClick={handleCategoryClose}>
+                  <Link to="/category/products" style={{ textDecoration: 'none', color: 'inherit' }}>
+                    Men
+                  </Link>
+                </MenuItem>
+                <MenuItem onClick={handleCategoryClose}>
+                  <Link to="/category/products" style={{ textDecoration: 'none', color: 'inherit' }}>
+                    Women
+                  </Link>
+                </MenuItem>
+                <MenuItem onClick={handleCategoryClose}>
+                  <Link to="/category/products" style={{ textDecoration: 'none', color: 'inherit' }}>
+                    Kids
+                  </Link>
+                </MenuItem>
+                <MenuItem onClick={handleCategoryClose}>
+                  <Link to="/category/products" style={{ textDecoration: 'none', color: 'inherit' }}>
+                    Accessories
+                  </Link>
+                </MenuItem>
               </Menu>
+
             </Box>
           </Box>
 

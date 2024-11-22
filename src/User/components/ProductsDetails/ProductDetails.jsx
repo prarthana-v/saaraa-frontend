@@ -5,8 +5,8 @@ import { Button } from '@mui/material';
 import { Grid } from '@mui/material';
 import { womens_dress } from '../../../Data/womens_dress';
 import Productcard from '../ProductByCategoryPage/ProductCard';
-
-
+import { useNavigate } from 'react-router-dom';
+import ProductReviewCard from '../ProductsDetails/ProductReviewCard'
 
 const product = {
   name: 'Basic Tee 6-Pack',
@@ -74,7 +74,7 @@ const ProductDetails = () => {
   }
 
   return (
-    <div className="bg-white lg:px-20">
+    <div className="bg-white lg:px-20 mt-40">
       <div className="pt-6">
         <nav aria-label="Breadcrumb">
           <ol role="list" className="mx-auto flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-7xl lg:px-8">

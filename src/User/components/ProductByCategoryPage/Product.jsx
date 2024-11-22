@@ -14,7 +14,7 @@ import {
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/react/20/solid'
 import { womens_dress } from '../../../Data/womens_dress';
-import Productcard from './productcard'
+import Productcard from '../ProductByCategoryPage/ProductCard.jsx'
 import { multiplefilters, singlefilter } from './FilterData.js'
 import { useLocation, useNavigate } from 'react-router-dom'
 
