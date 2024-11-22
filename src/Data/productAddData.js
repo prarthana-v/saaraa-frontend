@@ -1,0 +1,68 @@
+const dropdownData = {
+  categories: [
+    "Men's Clothing",
+    "Women's Clothing",
+    "Kids' Clothing",
+    "Accessories",
+    "Footwear",
+  ],
+  subcategories: {
+    "Men's Clothing": [
+      "T-Shirts",
+      "Shirts",
+      "Jeans",
+      "Trousers",
+      "Ethnic Wear",
+      "Jackets",
+    ],
+    "Women's Clothing": [
+      "Tops",
+      "Dresses",
+      "Sarees",
+      "Lehenga Cholis",
+      "Kurtis",
+      "Ethnic Wear",
+    ],
+    "Kids' Clothing": [
+      "T-Shirts",
+      "Shorts",
+      "Frocks",
+      "Sets & Suits",
+      "Ethnic Wear",
+    ],
+    Accessories: [
+      "Belts",
+      "Wallets",
+      "Jewelry",
+      "Watches",
+      "Bags",
+      "Sunglasses",
+    ],
+    Footwear: [
+      "Casual Shoes",
+      "Sports Shoes",
+      "Sandals",
+      "Boots",
+      "Flip Flops",
+    ],
+  },
+  sizes: ["XS", "S", "M", "L", "XL", "XXL", "Free Size"],
+  materials: ["Cotton", "Polyester", "Wool", "Silk", "Denim", "Linen"],
+  occasions: ["Casual", "Formal", "Party", "Festive", "Sports"],
+  patterns: ["Solid", "Striped", "Checked", "Printed", "Floral", "Embroidered"],
+  fits: ["Slim Fit", "Regular Fit", "Loose Fit"],
+  colors: ["Red", "Blue", "Green", "Yellow", "Black", "White"],
+  sleeveLengths: [
+    "Sleeveless",
+    "Cap Sleeve",
+    "Short Sleeve",
+    "Half Sleeve",
+    "Three-Quarter Sleeve",
+    "Full leeve",
+    "Roll-Up Sleeve",
+    "Bell Sleeve",
+    "Kimono Sleeve",
+  ],
+};
+
+export default dropdownData;

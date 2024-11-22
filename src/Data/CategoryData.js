@@ -1,0 +1,88 @@
+const categoryData = [
+  {
+    id: 1,
+    name: "Men's Clothing",
+    subcategories: [
+      "Shirts",
+      "T-Shirts",
+      "Kurtas & Ethnic Wear",
+      "Jeans",
+      "Trousers & Pants",
+      "Shorts",
+      "Blazers & Suits",
+      "Innerwear & Nightwear",
+      "Sweaters & Sweatshirts",
+      "Jackets & Coats",
+    ],
+  },
+  {
+    id: 2,
+    name: "Women's Clothing",
+    subcategories: [
+      "Sarees",
+      "Kurtis & Kurtas",
+      "Salwar Suits",
+      "Lehengas & Ghagras",
+      "Tops & T-Shirts",
+      "Dresses",
+      "Skirts",
+      "Jeans & Trousers",
+      "Leggings & Churidars",
+      "Blouses",
+      "Dupattas & Shawls",
+      "Innerwear & Nightwear",
+      "Sweaters & Cardigans",
+      "Jackets & Ethnic Coats",
+    ],
+  },
+  {
+    id: 3,
+    name: "Kids' Clothing",
+    subcategories: [
+      "Boys' T-Shirts & Shirts",
+      "Girls' Dresses",
+      "Ethnic Wear",
+      "Shorts & Skirts",
+      "Jeans & Pants",
+      "Innerwear & Nightwear",
+      "Sweaters & Jackets",
+    ],
+  },
+  {
+    id: 4,
+    name: "Ethnic & Festive Wear",
+    subcategories: [
+      "Sherwanis",
+      "Nehru Jackets",
+      "Indo-Western Suits",
+      "Dhoti Kurtas",
+      "Bridal Lehengas",
+      "Reception Gowns",
+    ],
+  },
+  {
+    id: 5,
+    name: "Sportswear",
+    subcategories: [
+      "Active T-Shirts",
+      "Track Pants & Shorts",
+      "Sports Jackets",
+      "Gym Wear",
+      "Yoga Pants & Leggings",
+    ],
+  },
+  {
+    id: 6,
+    name: "Accessories",
+    subcategories: [
+      "Dupattas",
+      "Shawls",
+      "Scarves",
+      "Stoles",
+      "Belts",
+      "Caps & Hats",
+    ],
+  },
+];
+
+export default categoryData;

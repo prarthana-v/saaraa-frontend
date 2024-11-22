@@ -1,0 +1,30 @@
+.next-arrow {
+  position: absolute;
+  top: 50%;
+  right: -4%;
+  transform: translateY(-50%);
+}
+.prev-arrow {
+  position: absolute;
+  top: 50%;
+  left: -4%;
+  transform: translateY(-50%);
+  z-index: 111;
+}
+
+@media (max-width: 700px) {
+  .next-arrow {
+    position: absolute;
+    /* top: 0%;
+    right: 0%; */
+    display: none;
+    transform: translateY(-50%);
+  }
+  .prev-arrow {
+    position: absolute;
+    /* top: 0%;
+    left: 0%; */
+    display: none;
+    transform: translateY(-50%);
+  }
+}

@@ -1,0 +1,138 @@
+/* Card Container */
+.card-container {
+  position: relative;
+  overflow: hidden;
+  transition: transforn 1s ease;
+}
+
+/* Image Section */
+.image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+}
+
+.card-container:hover .image-wrapper img {
+  transform: scale(1.2);
+  transition: transform 0.3s ease;
+}
+
+.card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.3s ease;
+}
+
+.card-container:hover .card-image {
+  opacity: 0.8;
+}
+
+/* Hover Overlay */
+.hover-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.card-container:hover .hover-overlay {
+  opacity: 1;
+}
+
+/* Hover Buttons */
+.hover-btn {
+  background-color: white;
+  padding: 10px;
+  margin: 0 10px;
+  border-radius: 50%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.hover-btn:hover {
+  transform: scale(1.1);
+}
+
+/* Icon Styling */
+.icon {
+  color: #333;
+  font-size: 24px;
+}
+
+/* Card Details */
+.card-details {
+  padding: 10px;
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.card-price {
+  font-size: 16px;
+  color: green;
+  margin-top: 5px;
+}
+
+/* Modal Box */
+.modal-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  text-align: center;
+}
+
+.modal-title {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.modal-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  margin-top: 10px;
+}
+
+.modal-price {
+  font-size: 18px;
+  color: green;
+  margin-top: 10px;
+}
+
+.modal-sizes {
+  font-size: 16px;
+  margin-top: 5px;
+}
+
+.modal-close-btn {
+  background-color: #ff5722;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  margin-top: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.modal-close-btn:hover {
+  background-color: #e64a19;
+}
