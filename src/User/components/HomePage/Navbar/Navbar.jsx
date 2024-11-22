@@ -43,8 +43,8 @@ const Navbar = () => {
             {/* Left: Nav Links */}
             <Box sx={{ display: "flex", gap: "20px" }}>
               <Button sx={{ textTransform: "none", color: "#1e1e1e" }} LinkComponent={NavLink} to='/'>Home</Button>
-              <Button sx={{ textTransform: "none", color: "#1e1e1e" }} LinkComponent={NavLink} to='/about'>About</Button>
-              <Button sx={{ textTransform: "none", color: "#1e1e1e" }} LinkComponent={NavLink} to='/contact'>Contact</Button>
+              <Button sx={{ textTransform: "none", color: "#1e1e1e" }} LinkComponent={NavLink} to='/'>About</Button>
+              <Button sx={{ textTransform: "none", color: "#1e1e1e" }} LinkComponent={NavLink} to='/'>Contact</Button>
             </Box>
 
             {/* Center: Logo */}
