@@ -8,7 +8,7 @@ const Cart = () => {
     navigate(`/checkout?step=2`)
   }
   return (
-    <div>
+    <div className='mt-40'>
       <div className="grid lg:grid-cols-3 relative lg:px-16">
         <div className="col-span-2">
           {
@@ -40,7 +40,7 @@ const Cart = () => {
             </div>
 
             <button onClick={handleCheckOut} className='btn btn-dark w-full rounded-0 mt-4 '>
-              <span className='font-meduim poppins tracking-wide'>Checkout</span>
+              <span className='font-meduim poppins tracking-wide'>Place Order</span>
             </button>
 
           </div>

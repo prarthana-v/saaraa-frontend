@@ -42,14 +42,16 @@ const Navbar = () => {
           >
             {/* Left: Nav Links */}
             <Box sx={{ display: "flex", gap: "20px" }}>
-              <Button sx={{ textTransform: "none", color: "#1e1e1e" }}>Home</Button>
-              <Button sx={{ textTransform: "none", color: "#1e1e1e" }}>About</Button>
-              <Button sx={{ textTransform: "none", color: "#1e1e1e" }}>Contact</Button>
+              <Button sx={{ textTransform: "none", color: "#1e1e1e" }} LinkComponent={NavLink} to='/'>Home</Button>
+              <Button sx={{ textTransform: "none", color: "#1e1e1e" }} LinkComponent={NavLink} to='/about'>About</Button>
+              <Button sx={{ textTransform: "none", color: "#1e1e1e" }} LinkComponent={NavLink} to='/contact'>Contact</Button>
             </Box>
 
             {/* Center: Logo */}
             <Box sx={{ display: "flex", justifyContent: "center", flex: 1, position: 'absolute', top: '15px', left: '50%', transform: 'translateX(-50%)' }}>
-              <img src="logo/saraa-trends-bg.png" alt="Saaraa Trends Logo" className="img-fluid" style={{ height: "100px" }} />
+              <Link to={'/'}>
+                <img src="logo/saraa-trends-bg.png" alt="Saaraa Trends Logo" className="img-fluid" style={{ height: "100px" }} />
+              </Link>
             </Box>
 
             {/* Right: Login, Seller, Cart */}
@@ -83,23 +85,34 @@ const Navbar = () => {
                     style: {
                       borderRadius: "8px",
                       boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-                      minWidth: "200px",
+                      minWidth: "250px",
+                      marginTop: '25px',
+                      marginLeft: "auto",
                     },
                   }}
                 >
                   <MenuItem onClick={handleClose} sx={{ fontSize: "0.9rem" }}>
-                    Create Account
+                    <Link to="/register" style={{ textDecoration: "none", color: "inherit" }}>
+                      Create Account
+                    </Link>
                   </MenuItem>
                   <MenuItem onClick={handleClose} sx={{ fontSize: "0.9rem" }}>
-                    My Wishlist
+                    <Link to="/wishlist" style={{ textDecoration: "none", color: "inherit" }}>
+                      My Wishlist
+                    </Link>
                   </MenuItem>
                   <MenuItem onClick={handleClose} sx={{ fontSize: "0.9rem" }}>
-                    My Orders
+                    <Link to="/account/order" style={{ textDecoration: "none", color: "inherit" }}>
+                      My Orders
+                    </Link>
                   </MenuItem>
                   <MenuItem onClick={handleClose} sx={{ fontSize: "0.9rem" }}>
-                    My Cart
+                    <Link to="/cart" style={{ textDecoration: "none", color: "inherit" }}>
+                      My Cart
+                    </Link>
                   </MenuItem>
                 </Menu>
+
               </div>
 
               {/* Become a Seller Button */}
@@ -205,6 +218,8 @@ const Navbar = () => {
             <Box sx={{ marginTop: "20px" }}>
               <Typography variant="h6">Total: ₹ 3,097</Typography>
               <Button
+                LinkComponent={NavLink}
+                to='/cart'
                 sx={{
                   marginTop: "10px",
                   width: "100%",
@@ -213,7 +228,7 @@ const Navbar = () => {
                   "&:hover": { backgroundColor: "#43a047" },
                 }}
               >
-                Checkout
+                View Cart
               </Button>
             </Box>
           </Drawer>

@@ -25,7 +25,7 @@ const DeliveryAdddressForm = () => {
         <Grid xs={12} lg={5} className='border rounded-e-md shadow-md h-[30.4rem] overflow-y-scroll'>
           <div className="p-5 py-7 border-b cursor-pointer ">
             <AddressCard />
-            <button className='btn btn-dark mt-2'>Deliver Here</button>
+            <button className='btn btn-dark mt-2'>Rent Here</button>
           </div>
 
 
@@ -123,7 +123,7 @@ const DeliveryAdddressForm = () => {
                 </Grid>
 
                 <Grid mt={5} ml={3}>
-                  <Button variant="contained" className='' size='large' type='submit'>Deliver Here</Button>
+                  <Button variant="contained" className='' size='large' type='submit'>Rent Here</Button>
                 </Grid>
               </Grid>
             </form>

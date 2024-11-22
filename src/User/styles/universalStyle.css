@@ -121,3 +121,6 @@ body {
   transform: translateX(-50%);
   z-index: 1000; /* Keeps it above other content */
 }
+.mt-50 {
+  margin-top: 50px;
+}

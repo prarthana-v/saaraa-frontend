@@ -20,7 +20,7 @@ const OrderDetails = () => {
 
         <Grid className='space-y-5' container>
           {
-            [1, 1, 1, 1, 1, 1].map((item) =>
+            [1, 1, 1].map((item) =>
               <Grid item container className='shadow-xl rounded-md p-7 border' sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
                 <Grid item xs={6}>
                   <div className="flex items-center space-x-2">

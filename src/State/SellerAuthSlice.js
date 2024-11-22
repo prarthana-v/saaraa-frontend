@@ -18,7 +18,7 @@ export const login = createAsyncThunk(
           Authorization: `Bearer ${token}`, // Include token
         },
       });
-      console.log("login", response.data);
+      // console.log("login", response.data);
       return response.data; // Expected to include { user, token }
     } catch (error) {
       return rejectWithValue(
@@ -31,11 +31,37 @@ export const login = createAsyncThunk(
 );
 
 // Async thunk for logout
-export const logout = createAsyncThunk("auth/logout", async () => {
-  // Any logout API logic can go here (if needed)
-  return null;
-});
+export const sellerlogout = createAsyncThunk(
+  "seller/logout",
+  async (_, { rejectWithValue }) => {
+    try {
+      const cookies = document.cookie;
 
+      // Find the specific cookie
+      const token = cookies
+        .split("; ")
+        .find((row) => row.startsWith("maintoken="))
+        ?.split("=")[1];
+
+      const response = await axios.post(
+        `${apiurl}/seller/logout`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || { message: "Unexpected Error" }
+      );
+    }
+  }
+);
 const initialState = {
   seller: null,
   token: null,
@@ -80,12 +106,15 @@ const authSlice = createSlice({
         state.error = action.payload;
       })
       // Handle logout
-      .addCase(logout.fulfilled, (state) => {
-        state.seller = null;
-        state.token = null;
+      .addCase(sellerlogout.fulfilled, (state) => {
+        state.user = null;
         state.isAuthenticated = false;
-        state.loading = false;
+        state.status = "logoutDone";
         state.error = null;
+      })
+      .addCase(sellerlogout.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
       });
   },
 });

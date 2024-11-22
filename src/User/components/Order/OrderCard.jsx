@@ -28,10 +28,10 @@ const OrderCard = () => {
           {true && <div>
             <p className='mb-0'>
               <AdjustIcon sx={{ width: "20px", height: "20px" }} className='mr-2 text-green-500 text-sm' />
-              <span>Delivered on 9th March</span>
+              <span>Rented on 9th March</span>
             </p>
             <p className='text-sx opacity-60'>
-              Your Item has been Delivered
+              Your Item has been on Rent
             </p>
           </div>
 

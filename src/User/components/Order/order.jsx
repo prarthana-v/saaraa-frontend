@@ -4,26 +4,23 @@ import OrderCard from './OrderCard'
 
 const orderStatus = [
   {
-    label: "on the Way",
-    value: "ontheway"
+    label: "currently rented",
+    value: "currentlyrented"
   },
   {
-    label: "Delivered",
-    value: "delivered"
+    label: "pastly rented",
+    value: "pastlyrented"
   },
   {
     label: "Cancelled",
     value: "cancelled"
-  },
-  {
-    label: "returned",
-    value: "returned"
   },
 ]
 
 const Order = () => {
   return (
     <div className='p-5 lg:px-20 '>
+      <h1 className='poppins text-3xl mb-5 ms-2'>My Orders</h1>
       <Grid container sx={{ justifyContent: 'space-between' }}>
         <Grid item xs={2.5}>
           <div className="h-auto shadow-md bg-white p-5 sticky top-5">

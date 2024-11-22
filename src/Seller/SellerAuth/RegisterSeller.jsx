@@ -141,9 +141,12 @@ const SellerRegister = () => {
 
                   <Grid item xs={12} className='text-center'>
                     <p className='text-center font-normal fs-15 mt-2'>Already Have a Seller Account?</p>
-                    <button className="btn bg-none w-full border-dark">
-                      <Link to={'/seller/login'} className='text-black fw-500 roboto'>Login</Link>
-                    </button>
+
+                    <Link to={'/seller/login'} className='text-black fw-500 roboto'>
+                      <button className="btn bg-none  underline border-dark">
+                        <span className='underline'>Login</span>
+                      </button>
+                    </Link>
                   </Grid>
 
                 </Grid>
