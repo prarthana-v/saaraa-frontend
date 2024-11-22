@@ -4,7 +4,7 @@ import { Radio, RadioGroup } from '@headlessui/react'
 import { Button } from '@mui/material';
 import { Grid } from '@mui/material';
 import { womens_dress } from '../../../Data/womens_dress';
-import Productcard from '../product/productcard';
+import Productcard from '../product/ProductCard';
 
 
 
