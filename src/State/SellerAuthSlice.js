@@ -11,6 +11,7 @@ export const login = createAsyncThunk(
       Cookies.set("token", response.data.token, {
         secure: true,
       });
+      console.log("login", response.data);
       return response.data; // Expected to include { user, token }
     } catch (error) {
       return rejectWithValue(

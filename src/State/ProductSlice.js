@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 const apiurl = import.meta.env.VITE_API_URL;
-console.log(apiurl);
+// console.log(apiurl);
 import Cookies from "js-cookie";
 
 export const fetchProducts = createAsyncThunk(
