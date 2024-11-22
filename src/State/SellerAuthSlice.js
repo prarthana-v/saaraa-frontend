@@ -1,3 +1,4 @@
+import { Cookie } from "@mui/icons-material";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 const apiurl = import.meta.env.VITE_API_URL;
@@ -7,9 +8,15 @@ export const login = createAsyncThunk(
   "auth/login",
   async (sellerdata, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${apiurl}/seller/login`, sellerdata);
-      Cookies.set("token", response.data.token, {
-        secure: true,
+      const token = Cookie.length("token");
+      if (!token) {
+        console.log("no token in login");
+      }
+      const response = await axios.post(`${apiurl}/seller/login`, sellerdata, {
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`, // Include token
+        },
       });
       console.log("login", response.data);
       return response.data; // Expected to include { user, token }
