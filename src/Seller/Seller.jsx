@@ -8,6 +8,7 @@ import Sidebar from './Sidebar.jsx';
 import SelectCategoryPage from './SelectCategory.jsx';
 import { Inventory } from '@mui/icons-material';
 import InventoryPage from './Inventory/InventoryPage.jsx';
+import OrderPage from './OrderPage.jsx';
 
 const Seller = () => {
 
@@ -23,6 +24,7 @@ const Seller = () => {
             <Route path="/" element={<Dashboard />} />
             <Route path="/products" element={<ProductPage />} />
             <Route path='/inventory' element={<InventoryPage />} />
+            <Route path='/orders' element={<OrderPage />} />
           </Routes>
         </div>
       </div>

@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { login } from '../../State/SellerAuthSlice';
 import { useEffect } from 'react';
 import axios from 'axios';
+const apiurl = import.meta.env.VITE_API_URL
 
 const SellerLogin = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -14,7 +15,6 @@ const SellerLogin = () => {
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(null);
   const { loading, error } = useSelector((state) => state.auth);
-  const apiurl = import.meta.env.VITE_API_URL
 
   const handleChange = (e) => {
     const { name, value } = e.target;

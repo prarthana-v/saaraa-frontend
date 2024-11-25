@@ -45,7 +45,7 @@ const Dashboard = () => {
       <div>
         <Box sx={{ p: 3 }}>
 
-          <Grid xs={12} >
+          <Grid  >
             <Box className='bg-utility  ps-3 py-3' sx={{ borderRadius: 2 }}>
               <h4 className='mb-0 roboto fs-18  '>Welcome Back <span className='text-uppercase'>{sellerInfo.username}</span> !!</h4>
               <p className='mb-0 roboto fs-15 opacity-60'>Boost your business with SaaraaTrends.</p>

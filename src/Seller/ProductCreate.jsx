@@ -12,6 +12,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from "react-redux";
 import { createProduct } from "../State/ProductSlice";
 import ImageUploadSection from "./components/ImageUploadSection";
+import '../../src/User/styles/universalStyle.css'
 
 const AddProductPage = () => {
   const location = useLocation();
@@ -47,6 +48,7 @@ const AddProductPage = () => {
   }, [location.state]);
 
 
+
   const handleSizeChange = (size) => {
     setSelectedSizes((prev) =>
       prev.includes(size)
@@ -57,6 +59,7 @@ const AddProductPage = () => {
 
   const handleDone = () => {
     console.log("Selected Sizes:", selectedSizes);
+    setSelectedSizes([])
   };
 
   const handleInputChange = (e) => {
@@ -126,7 +129,7 @@ const AddProductPage = () => {
   return (
     <>
       <div className="bg-light">
-        <div className="container">
+        <div className="container-fluid">
           <div className="row">
             <Box sx={{ p: 4 }}>
               <Typography variant="h6" sx={{ mb: 3 }}>
@@ -227,11 +230,12 @@ const AddProductPage = () => {
 
                         {/* sizes */}
                         <Grid item xs={12} sm={6}>
-                          <div style={{ display: "flex", alignItems: "center" }}>
-                            <TextField select fullWidth name="select size" label='Select Sizes'>
+                          <div style={{ display: "flex", alignItems: "center", }}>
+                            <TextField select fullWidth name="select size" label='Select Sizes' value={selectedSizes.join(', ')}
+                            >
                               {dropdownData.sizes.map((size) => (
+
                                 <FormControlLabel
-                                  style={{ margin: 5, }}
                                   key={size}
                                   control={
                                     <Checkbox
@@ -241,6 +245,7 @@ const AddProductPage = () => {
                                   }
                                   label={size}
                                 />
+
                               ))}
                               <Button variant="contained" color="primary" onClick={handleDone} sx={{ marginInline: 2 }}>
                                 Done

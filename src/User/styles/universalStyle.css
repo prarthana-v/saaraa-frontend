@@ -124,3 +124,21 @@ body {
 .mt-50 {
   margin-top: 50px;
 }
+.dropdown {
+  max-height: 300px;
+  overflow-y: auto;
+}
+/* App.css */
+.MuiPaper-root {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+.MuiPaper-root::-webkit-scrollbar {
+  width: 6px;
+}
+
+.MuiPaper-root::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
