@@ -4,7 +4,7 @@ const apiurl = import.meta.env.VITE_API_URL;
 
 // Create an async thunk to fetch orders
 export const fetchOrders = createAsyncThunk(
-  "orders/fetchOrders",
+  "orders/fetchOrdersbyseller",
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(`${apiurl}/orders/getordersbyseller`, {

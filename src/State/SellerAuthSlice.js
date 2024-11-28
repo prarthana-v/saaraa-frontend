@@ -25,9 +25,9 @@ export const login = createAsyncThunk(
   "auth/login",
   async (sellerdata, { rejectWithValue }) => {
     try {
-      const token = Cookies.get("token");
+      const token = Cookies.get("sellertoken");
       if (!token) {
-        console.log("no token in login");
+        console.log("no token in login seller");
       }
       const response = await axios.post(`${apiurl}/seller/login`, sellerdata, {
         withCredentials: true,
@@ -52,13 +52,7 @@ export const sellerlogout = createAsyncThunk(
   "seller/logout",
   async (_, { rejectWithValue }) => {
     try {
-      const cookies = document.cookie;
-
-      // Find the specific cookie
-      const token = cookies
-        .split("; ")
-        .find((row) => row.startsWith("maintoken="))
-        ?.split("=")[1];
+      const token = Cookies.get("sellertoken");
 
       const response = await axios.post(
         `${apiurl}/seller/logout`,

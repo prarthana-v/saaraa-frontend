@@ -4,12 +4,13 @@ const apiurl = import.meta.env.VITE_API_URL;
 import Cookies from "universal-cookie";
 const cookies = new Cookies();
 
+// for seller panel
 export const fetchProducts = createAsyncThunk(
-  "products/fetchProducts",
+  "products/fetchProductsbyseller",
   async (_, { rejectWithValue }) => {
     try {
-      const token = cookies.get("token");
-      console.log(token, "lll");
+      const token = cookies.get("sellertoken");
+      console.log(token, "Token in Fetch Seller Products");
       if (!token) {
         console.log("no token");
         throw new Error("Authentication token not found");
@@ -41,8 +42,8 @@ export const createProduct = createAsyncThunk(
   async (productData, { rejectWithValue }) => {
     try {
       console.log(productData);
-      const token = Cookies.get("token");
-      console.log(token, "lll");
+      const token = cookies.get("sellertoken");
+      console.log(token, "Token in Create Product");
       if (!token) {
         console.log("token nathi");
         throw new Error("Token not found. Please log in again.");
@@ -65,7 +66,7 @@ export const createProduct = createAsyncThunk(
   }
 );
 
-// Async thunk for fetching all products
+// Async thunk for fetching all products for user
 export const fetchAllProducts = createAsyncThunk(
   "products/fetchAll",
   async (_, { rejectWithValue }) => {
@@ -83,6 +84,7 @@ export const fetchAllProducts = createAsyncThunk(
   }
 );
 
+// for user site
 export const fetchProductDetails = createAsyncThunk(
   "product/fetchDetails",
   async (id, { rejectWithValue }) => {

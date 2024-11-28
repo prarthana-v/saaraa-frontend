@@ -18,6 +18,14 @@ const AddProductPage = () => {
   const location = useLocation();
 
   const [category, setCategory] = useState(location.state?._id || '');
+
+  useEffect(() => {
+    if (location.state?.category) {
+      setCategory(location.state.category);
+    }
+  }, [location.state]);
+
+
   const [selectedSizes, setSelectedSizes] = useState([]);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -39,13 +47,6 @@ const AddProductPage = () => {
   });
   const [images, setImages] = useState([]);
   const dispatch = useDispatch()
-
-
-  useEffect(() => {
-    if (location.state?.category) {
-      setCategory(location.state.category);
-    }
-  }, [location.state]);
 
 
 
@@ -82,6 +83,8 @@ const AddProductPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // console.log(formDataToSend, "form no data")
+    console.log(category, "category")
     const formDataToSend = new FormData();
     Object.keys(formData).forEach((key) => {
       if (key === "images") {
