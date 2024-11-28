@@ -29,7 +29,17 @@ export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async (loginData, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${apiurl}/auth/login`, loginData);
+      const token = Cookies.get("token");
+      if (!token) {
+        console.log("no token in login user");
+      }
+      console.log(token);
+      const response = await axios.post(`${apiurl}/auth/login`, loginData, {
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`, // Include token
+        },
+      });
       console.log("login user response : ", response.data);
       return response.data;
     } catch (error) {

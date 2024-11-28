@@ -36,9 +36,7 @@
   transform: translateX(-50%);
 }
 .navbar-sticky {
-  position: fixed;
+  position: sticky !important;
   width: 100%;
-  top: 0;
-  height: 60px;
   z-index: 1000;
 }

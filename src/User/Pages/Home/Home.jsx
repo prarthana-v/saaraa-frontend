@@ -6,7 +6,7 @@ import HomePage from './HomePage'
 import Cart from '../../components/Cart/Cart'
 import Checkout from '../../components/Checkout/Checkout'
 import Product from '../../components/ProductByCategoryPage/Product'
-import ProductDetails from '../../components/ProductsDetails/ProductDetails'
+import ProductPage from '../../components/ProductsDetails/ProductDetailsPage'
 
 const Home = () => {
   return (
@@ -19,7 +19,7 @@ const Home = () => {
         <Route path='/cart' element={<Cart />} />
         <Route path='/checkout' element={<Checkout />} />
         <Route path='/category/products' element={<Product />} />
-        <Route path='/product/:productId' element={<ProductDetails />} />
+        <Route path='/product/:productId' element={< ProductPage />} />
       </Routes>
       <div>
         <Footer />

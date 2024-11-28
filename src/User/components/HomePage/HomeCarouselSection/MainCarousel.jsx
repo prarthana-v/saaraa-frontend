@@ -8,9 +8,9 @@ import CarouselCard from './CarouselCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllProducts } from '../../../../State/ProductSlice'
 
-const HomeCarousel = ({ data, sectionName }) => {
+const HomeCarousel = ({ sectionName }) => {
   const dispatch = useDispatch()
-  // useSelector((state) => console.log(state.products))
+  useSelector((state) => console.log(state.products))
   const { products, loading, error } = useSelector((state) => state.products);
 
 
@@ -23,7 +23,7 @@ const HomeCarousel = ({ data, sectionName }) => {
 
   return (
     <div className=''>
-      <div className="container my-5">
+      <div className="container-fluid max-lg mb-5">
         <div className="row mb-4">
           <h3 className='h2 poppins px-0 ps-2 mb-0'>{sectionName}</h3>
         </div>

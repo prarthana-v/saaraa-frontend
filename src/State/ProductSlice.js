@@ -74,6 +74,7 @@ export const fetchAllProducts = createAsyncThunk(
       console.log("res", response.data);
       return response.data; // Assuming the backend sends an array of products
     } catch (error) {
+      console.log(error);
       // Reject with a meaningful error message
       return rejectWithValue(
         error.response?.data?.message || "Failed to fetch products"
@@ -81,9 +82,26 @@ export const fetchAllProducts = createAsyncThunk(
     }
   }
 );
+
+export const fetchProductDetails = createAsyncThunk(
+  "product/fetchDetails",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        `${apiurl}/product/getproductDetails/${id}`
+      );
+      console.log("product Details", response.data);
+      return response.data; // Assuming the API response contains product details
+    } catch (error) {
+      return rejectWithValue(error.response.data || "Something went wrong");
+    }
+  }
+);
+
 // Initial state
 const initialState = {
   products: [],
+  productDetails: null,
   loading: false,
   token: null,
   error: null,
@@ -96,6 +114,10 @@ const productSlice = createSlice({
   reducers: {
     setProducts: (state, action) => {
       state.products = action.payload;
+    },
+    clearProductDetails: (state) => {
+      state.productDetails = null;
+      state.error = null;
     },
   },
   extraReducers: (builder) => {
@@ -143,8 +165,23 @@ const productSlice = createSlice({
         state.loading = false;
         state.error = action.payload; // Capture and store the error message
       });
+
+    // fetch product details
+    builder
+      .addCase(fetchProductDetails.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchProductDetails.fulfilled, (state, action) => {
+        state.loading = false;
+        state.productDetails = action.payload;
+      })
+      .addCase(fetchProductDetails.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
   },
 });
 
-export const { setProducts } = productSlice.actions;
+export const { setProducts, clearProductDetails } = productSlice.actions;
 export default productSlice.reducer;

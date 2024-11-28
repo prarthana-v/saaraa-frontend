@@ -4,12 +4,17 @@ import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../../../../State/UserAuthSlice";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
+const apiurl = import.meta.env.VITE_API_URL
+import axios from 'axios';
+
 const LoginForm = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -20,20 +25,58 @@ const LoginForm = () => {
 
     try {
       const result = await dispatch(loginUser(obj));
-      console.log(result);
+      console.log(result, "result");
 
       if (loginUser.fulfilled.match(result)) {
-        toast.success('Login successful!');
-        navigate('/');
+        const token = result.payload.token;
+        console.log("Token:", token);
+
+        // Check authentication status after login
+        const checkAuth = async () => {
+          try {
+            const response = await axios.get(`${apiurl}/auth/check-auth`, {
+              withCredentials: true,
+              headers: {
+                Authorization: `Bearer ${token}`, // Include token
+              },
+            });
+
+            console.log("check-auth response", response);
+
+            if (response.data.success === true) {
+              setIsAuthenticated(true); // User is logged in
+
+              // Determine where to navigate after successful authentication
+              const redirectUrl = localStorage.getItem("redirectAfterLogin");
+              if (redirectUrl) {
+                navigate(redirectUrl); // Redirect to the saved URL
+                localStorage.removeItem("redirectAfterLogin"); // Clean up storage
+              } else {
+                navigate("/"); // Default to home or dashboard
+              }
+            } else {
+              setIsAuthenticated(false); // Handle authentication failure
+              toast.error("Authentication failed.");
+            }
+          } catch (error) {
+            console.log("Error in check-auth:", error);
+            setIsAuthenticated(false); // Handle auth error
+            toast.error("An error occurred while verifying authentication.");
+          }
+        };
+
+        // Call the authentication check
+        await checkAuth();
       } else {
-        // Show only one toast for errors
-        const errorMessage = result.payload?.error || 'Login failed!';
+        // Handle login failure
+        const errorMessage = result.payload?.error || "Login failed!";
         toast.error(errorMessage);
       }
     } catch (error) {
       console.error("Unexpected error:", error);
-      toast.error('An unexpected error occurred.');
+      toast.error("An unexpected error occurred.");
     }
+
   };
 
   return (

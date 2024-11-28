@@ -3,6 +3,7 @@ import Slider from "react-slick";
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import CardItem from './CardItem';
+import Container from '@mui/material/Container'
 
 
 const CarouselCard = ({ product }) => {
@@ -31,18 +32,24 @@ const CarouselCard = ({ product }) => {
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
     responsive: [
-
       {
-        breakpoint: 768, // For screens smaller than 768px
+        breakpoint: 992, // For screens smaller than 768px
         settings: {
           slidesToShow: 3, // Show 2 slides
           slidesToScroll: 1,
         },
       },
       {
+        breakpoint: 768, // For screens smaller than 768px
+        settings: {
+          slidesToShow: 2, // Show 2 slides
+          slidesToScroll: 1,
+        },
+      },
+      {
         breakpoint: 576, // For screens smaller than 480px
         settings: {
-          slidesToShow: 2, // Show 1 slide
+          slidesToShow: 1, // Show 1 slide
           slidesToScroll: 1,
         },
       },
@@ -51,17 +58,16 @@ const CarouselCard = ({ product }) => {
 
 
   return (
-    <div>
+    <div className='container-fluid'>
       <div className="row">
         <div className="px-0">
           <div className="px-0">
             <Slider {...settings}>
               {
-                product.map((c) => <CardItem image={c.images[0]} sizes={c.sizes} title={c.productName} price={c.price} />)
+                product.map((c) => <CardItem image={c.images[0]} sizes={c.sizes} title={c.productName} price={c.price} id={c._id} />)
               }
             </Slider>
           </div>
-
         </div>
       </div>
     </div>

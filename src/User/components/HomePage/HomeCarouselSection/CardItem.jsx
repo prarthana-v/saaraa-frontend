@@ -1,143 +1,92 @@
-// import React, { useState } from "react";
-// import { Dialog } from "@headlessui/react";
-// import VisibilityIcon from "@mui/icons-material/Visibility";
-// import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import React, { useState } from 'react';
 
-// const CartItem = ({ image, title, price, sizes = [] }) => {
-//  const [open, setOpen] = useState(false);
+import './CardItem.css';
+import { FaBullseye } from "react-icons/fa"; import { FaRegHeart } from "react-icons/fa";
+import Dialog from '@mui/material/Dialog';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import ProductDetails from '../../ProductsDetails/ProductDetails';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchProductDetails, clearProductDetails } from '../../../../State/ProductSlice';
 
-//   const handleOpen = () => setOpen(true);
-//   const handleClose = () => setOpen(false);
+const CardItem = ({ image, title, price, sizes = [], id }) => {
+  const [isModalOpen, setModalOpen] = useState(false);
+  const { productDetails, loading, error } = useSelector((state) => state.products);
+  // console.log(productDetails)
+  const dispatch = useDispatch()
 
+  const handleOpenModal = () => {
+    setModalOpen(true);
+    // console.log(id, "id")
+    dispatch(fetchProductDetails(id)); // Fetch product details
+  };
 
-//   return (
-//     <div className="max-w-xs mx-auto bg-white overflow-hidden group transform transition duration-300 hover:scale-105">
-//       {/* Image Section */}
-//       <div className="relative">
-//         <img
-//           src={image}
-//           alt={title}
-//           className="w-full h-96 object-cover object-center transition-all duration-300 group-hover:opacity-80"
-//         />
-//         <div className="absolute top-0 left-0 w-full h-full bg-black/40 flex justify-center items-center opacity-0 group-hover:opacity-100 transition-all">
-//           {/* Hover actions */}
-//           <button
-//             className="bg-white p-2 rounded-full shadow-lg mr-2"
-//             onClick={handleOpen}
-//             aria-label="Quick View"
-//           >
-//             <VisibilityIcon color="black" className="text-black" fontSize="large" />
-//           </button>
-//           <button
-//             className="bg-white p-2 rounded-full shadow-lg"
-//             aria-label="Add to Wishlist"
-//           >
-//             <FavoriteBorderIcon className="text-black" fontSize="large" />
-//           </button>
-//         </div>
-//       </div>
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    dispatch(clearProductDetails()); // Clear product details on close
+  };
 
-//       {/* Card Details Section */}
-//       <div className="p-2">
-//         <h3 className="text-lg mb-0 font-semibold text-gray-800 truncate">{title}</h3>
-
-//         <p className="text-md text-gray-500 mb-0">₹{price}</p>
-//         <p className="text-md text-gray-600 mb-0">
-//           Sizes: {sizes.length > 0 ? sizes.join(", ") : "Not Available"}
-//         </p>
-
-//       </div>
-
-//       {/* <div className="px-1 flex justify-between items-center">
-//         <button className="bg-black text-white px-4 py-2 shadow-md hover:bg-green-700 transition-all duration-200">
-//           Add to Cart
-//         </button>
-//         <button className="text-green-600 text-sm">Wishlist</button>
-//       </div> */}
-
-//       {/* Modal for Product Details */}
-//       <Dialog open={open} onClose={handleClose}>
-//         <div className="fixed inset-0 bg-black/50 flex justify-center items-center">
-//           <Dialog.Panel className="bg-white p-6 rounded-lg max-w-md w-full shadow-xl">
-//             <h2 className="text-2xl font-bold text-gray-800 mb-4">{title}</h2>
-//             <img
-//               src={image}
-//               alt={title}
-//               className="w-full h-64 object-cover object-center rounded-md mb-4"
-//             />
-//             <p className="text-lg text-gray-700 mb-4">Price: ₹{price}</p>
-//             <p className="text-sm text-gray-600">
-//               Sizes: {sizes.length > 0 ? sizes.join(", ") : "Not Available"}
-//             </p>
-//             <div className="mt-6 flex justify-end">
-//               <button
-//                 className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700"
-//                 onClick={handleClose}
-//               >
-//                 Close
-//               </button>
-//             </div>
-//           </Dialog.Panel>
-//         </div>
-//       </Dialog>
-//     </div>
-//   );
-// };
-
-// export default CartItem;
-import React, { useState } from "react";
-import { Modal, Box } from "@mui/material";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import "./CardItem.css";
-
-const CardItem = ({ image, title, price, sizes = [] }) => {
-  const [open, setOpen] = useState(false);
-
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
 
   return (
-    <div className="card-container px-2">
-      {/* Image Section */}
-      <div className="image-wrapper">
-        <img src={image} alt={title} className="card-image" />
-        {/* Hover Actions */}
-        <div className="hover-overlay">
-          <button className="hover-btn" onClick={handleOpen}>
-            <VisibilityIcon className="icon" />
-          </button>
-          <button className="hover-btn">
-            <FavoriteBorderIcon className="icon" />
-          </button>
+    <div className="card-item px-2">
+      {/* Card Container */}
+      <div className="card-container px-5 px-sm-0">
+        {/* Image Section */}
+        <div className="image-wrapper">
+          <img src={image} alt={title} className="card-image" />
+          {/* Hover Actions */}
+          <div className="hover-overlay">
+            <button
+              className="hover-btn"
+              onClick={handleOpenModal}// Fix here
+              aria-label="View Product Details"
+            >
+              <FaBullseye />
+            </button>
+            <button className="hover-btn" aria-label="Add to Wishlist">
+              <FaRegHeart />
+            </button>
+          </div>
+        </div>
+
+        {/* Card Details */}
+        <div className="card-details text-center p-2">
+          <h3 className="product-title roboto text-xl text-black opacity-70">{title}</h3>
+          <p className="product-price roboto mb-0 mt-3 fs-15 text-gray-600 opacity-60">₹{price}</p>
+          <p className="product-sizes roboto fs-15 text-gray-600 opacity-60">
+            Sizes: {sizes.length > 0 ? sizes.join(', ') : 'Not Available'}
+          </p>
         </div>
       </div>
 
-      {/* Minimal Details */}
-      <div className="p-2">
-        <h3 className="text-lg mb-0 font-semibold text-gray-800 truncate">{title}</h3>
+      {/* Modal for Product Details */}
+      <Dialog
+        open={isModalOpen}
+        onClose={handleCloseModal}
+        maxWidth="lg"
+        fullWidth
+        disableScrollLock
+      >
+        <div style={{ position: 'relative' }}>
+          {/* Close Button */}
+          <IconButton
+            aria-label="Close"
+            onClick={handleCloseModal}
+            style={{ position: 'absolute', right: 8, top: 8 }}
+          >
+            <CloseIcon />
+          </IconButton>
+          {/* Display Loading, Error, or Product Details */}
+          {loading ? (
+            <p>Loading...</p>
+          ) : error ? (
+            <p>Error: {error}</p>
+          ) : (
+            productDetails && <ProductDetails productDetails={productDetails} />
+          )}
 
-        <p className="text-md text-gray-500 mb-0">₹{price}</p>
-        <p className="text-md text-gray-600 mb-0">
-          Sizes: {sizes.length > 0 ? sizes.join(", ") : "Not Available"}
-        </p>
-
-      </div>
-
-      {/* Modal for Details */}
-      <Modal open={open} onClose={handleClose}>
-        <Box className="modal-box">
-          <h2 className="modal-title">{title}</h2>
-          <img src={image} alt={title} className="modal-image" />
-          <p className="modal-price">Price: ₹{price}</p>
-          <p className="modal-sizes">
-            Sizes: {sizes.length > 0 ? sizes.join(", ") : "Not available"}
-          </p>
-          <button className="modal-close-btn" onClick={handleClose}>
-            Close
-          </button>
-        </Box>
-      </Modal>
+        </div>
+      </Dialog>
     </div>
   );
 };

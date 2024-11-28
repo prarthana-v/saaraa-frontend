@@ -40,7 +40,7 @@ const SellerLogin = () => {
           setIsAuthenticated(false); // Seller not logged in
         }
       } catch (error) {
-        console.log(error);
+        console.log("error in check-auth LoginSeller", error);
         setIsAuthenticated(false); // Error handling if auth fails
       }
     };
