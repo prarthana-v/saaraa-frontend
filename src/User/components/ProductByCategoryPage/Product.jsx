@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   Dialog,
   DialogBackdrop,
@@ -16,7 +16,9 @@ import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from
 import { womens_dress } from '../../../Data/womens_dress';
 import Productcard from '../ProductByCategoryPage/ProductCard.jsx'
 import { multiplefilters, singlefilter } from './FilterData.js'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { fetchProductsByCategory } from '../../../State/ProductSlice.js';
+import { useDispatch, useSelector } from 'react-redux';
 
 const sortOptions = [
   { name: 'Most Popular', href: '#', current: true },
@@ -33,7 +35,13 @@ function classNames(...classes) {
 const Product = () => {
 
   const location = useLocation();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { categoryName } = useParams();
+  console.log(categoryName)
+  useSelector((state) => console.log(state.products))
+  const { productsByCategory, loading, errorByCategory } = useSelector((state) => state.products);
+
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
 
   const handleFilter = (id, value) => {
@@ -68,6 +76,14 @@ const Product = () => {
     navigate({ search: `?${searchParams.toString()}` });
 
   }
+
+  useEffect(() => {
+    // dispatch(fetchAllProducts());
+    dispatch(fetchProductsByCategory(categoryName))
+  }, [dispatch, categoryName]);
+
+  console.log(productsByCategory.men)
+  // const men = productsByCategory.men
 
   return (
     <div className="bg-white" >
@@ -315,7 +331,9 @@ const Product = () => {
               <div className="lg:col-span-4 w-full">
                 <div className="flex flex-wrap justify-left bg-white">
                   {
-                    womens_dress.map((item, i) => <Productcard key={i} product={item} />)
+                    productsByCategory[categoryName]?.map((product, i) => (
+                      <Productcard key={product._id || i} product={product} />
+                    ))
                   }
                 </div>
               </div>

@@ -16,7 +16,6 @@ const HomeCarousel = ({ sectionName, category }) => {
   const { productsByCategory, loading, errorByCategory } = useSelector((state) => state.products);
 
   useEffect(() => {
-    // dispatch(fetchAllProducts());
     dispatch(fetchProductsByCategory(category))
   }, [dispatch, category]);
 
@@ -53,8 +52,9 @@ const HomeCarousel = ({ sectionName, category }) => {
           {/* Product Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {products.map((product, index) => (
-              <Link to={`/product/${product._id}`} className="cursor-pointer no-underline">
+              <a target='_blank' href={`/product/${product._id}`} className="cursor-pointer no-underline">
                 <div key={index} className="relative group border rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition" >
+
                   {/* Image Container */}
                   <div className="relative h-[350px] overflow-hidden group">
                     <img
@@ -82,7 +82,7 @@ const HomeCarousel = ({ sectionName, category }) => {
                     </div>
                   </div>
                 </div>
-              </Link>
+              </a>
             ))}
           </div>
         </div>
