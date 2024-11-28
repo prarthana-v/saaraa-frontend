@@ -6,7 +6,9 @@ const HomePage = () => {
   return (
     <div>
       <Heroslider />
-      <HomeCarousel sectionName={'Best Seller'} />
+      <HomeCarousel category={'women'} sectionName={"Women's Collection "} />
+      <HomeCarousel category={'men'} sectionName={"Men's Collection "} />
+      <HomeCarousel category={'kid'} sectionName={"Kid's Collection "} />
     </div>
   )
 }

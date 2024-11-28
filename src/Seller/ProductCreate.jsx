@@ -34,7 +34,7 @@ const AddProductPage = () => {
     category: category ? category : "",
     color: "",
     sleeveLength: "",
-    size: [],
+    sizes: [],
     images: [],
     material: "",
     occasion: "",
@@ -42,6 +42,7 @@ const AddProductPage = () => {
     fit: "",
     price: "",
     stock: "",
+    mrp: '',
     manufacturerDetails: "",
     packerDetails: "",
   });
@@ -81,9 +82,9 @@ const AddProductPage = () => {
     setImages(images.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log(formDataToSend, "form no data")
+
     console.log(category, "category")
     const formDataToSend = new FormData();
     Object.keys(formData).forEach((key) => {
@@ -106,14 +107,15 @@ const AddProductPage = () => {
 
     console.log("FormData to send:", formData);
 
-    dispatch(createProduct(formDataToSend));
+    let response = await dispatch(createProduct(formDataToSend));
+
     setFormData({
       productName: "",
       description: "",
       category: "",
       color: "",
       sleeveLength: "",
-      size: [],
+      sizes: [],
       images: [],
       material: "",
       occasion: "",
@@ -124,9 +126,9 @@ const AddProductPage = () => {
       manufacturerDetails: "",
       packerDetails: "",
     })
-    // navigate('/seller/products')
+    setSelectedSizes([]);
     toast.success("Product added successfully!");
-
+    navigate('/seller/products')
   };
 
   return (
@@ -196,6 +198,26 @@ const AddProductPage = () => {
 
                             />
                             <Tooltip title="Set the selling price for your product.">
+                              <IconButton aria-label="info">
+                                <InfoOutlinedIcon sx={{ fontSize: 16 }} />
+                              </IconButton>
+                            </Tooltip>
+                          </div>
+                        </Grid>
+
+                        {/* MRP */}
+                        <Grid item xs={12} sm={6}>
+                          <div style={{ display: "flex", alignItems: "center" }}>
+                            <TextField
+                              label="MRP"
+                              name="mrp"
+                              value={formData.mrp}
+                              onChange={handleInputChange}
+                              type="number"
+                              fullWidth
+
+                            />
+                            <Tooltip title="Set the MRP price for your product.">
                               <IconButton aria-label="info">
                                 <InfoOutlinedIcon sx={{ fontSize: 16 }} />
                               </IconButton>

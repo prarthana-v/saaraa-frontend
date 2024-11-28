@@ -1,259 +1,154 @@
-import React, { useState } from "react";
-import { Box, Button, IconButton, InputBase, Typography, Badge, Menu, MenuItem, Drawer, List, ListItem, ListItemText } from "@mui/material";
-import { ShoppingCart, Search, ExpandMore, Close, } from "@mui/icons-material";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { KeyboardArrowDown } from "@mui/icons-material";
-import { NavLink } from "react-router-dom";
-import '../Navbar/navbar.css'
+import { ShoppingCart, Search, ExpandMore, Close } from "@mui/icons-material";
+import { Drawer, IconButton, Typography, Badge, List, ListItem, ListItemText } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCategories } from "../../../../State/CategorySlice";
 
 const Navbar = () => {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [anchorEl2, setAnchorEl2] = useState(null);
   const [openCart, setOpenCart] = useState(false);
-
-  const handleCategoryClick = (event) => setAnchorEl(event.currentTarget);
-  const handleCategoryClose = () => setAnchorEl(null);
-
+  const dispatch = useDispatch()
   const handleCartOpen = () => setOpenCart(true);
   const handleCartClose = () => setOpenCart(false);
-
-  // Handle hover events
-  const handleClick = (event) => {
-    setAnchorEl2(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl2(null);
-  };
+  const { categories } = useSelector((state) => state.category)
+  console.log(categories)
+  // Sample categories array
+  useEffect(() => {
+    dispatch(fetchCategories())
+  }, [dispatch])
 
   return (
-    <>
-      <div className="relative ">
-        <div className="fixed w-full top-0 bg-white shadow-lg z-50">
-          <Box sx={{ backgroundColor: "#f7f7f7", padding: "20px 20px" }}>
-            {/* First Row */}
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginBottom: "10px",
-              }}
+    <div className="w-full bg-white fixed top-0 shadow-lg z-50">
+      <div className="bg-light border-b">
+        {/* First Row: Logo, Login, and Become a Seller */}
+        <div className="flex items-center justify-between px-6 pt-3 md:justify-around">
+          {/* Logo */}
+          <div className="flex-shrink-0">
+            <Link to="/">
+              <img
+                src="https://res.cloudinary.com/duxafj5j5/image/upload/v1731158192/category/w5siphjkoo9fprtbda4s.png"
+                alt="Saaraa Trends Logo"
+                className="h-[5.5rem]"
+              />
+            </Link>
+          </div>
+
+          <div className="hidden sm:flex sm:w-2/4 px-6 py-2 md:py-3">
+            <div className="relative mx-auto w-full">
+              <input
+                type="text"
+                placeholder="Search for products..."
+                className="pl-10 pr-4 py-2 text-md w-full rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+              />
+              <Search className="absolute top-2.5 left-3 text-gray-400" />
+            </div>
+          </div>
+
+          {/* Right: Login, Become a Seller, Cart */}
+          <div className="flex xs:gap-3 sm:gap-3 md:gap-4">
+            <Link
+              to="/login"
+              className="text-white p-sm-2 px-md-3 py-md-2 md:text-md r no-underline bg-gray-800 rounded-sm font-medium hover:bg-gray-700"
             >
-              {/* Left: Nav Links */}
-              <Box sx={{ display: "flex", gap: "20px" }}>
-                <Button sx={{ textTransform: "none", color: "#1e1e1e" }} LinkComponent={NavLink} to='/'>Home</Button>
-                <Button sx={{ textTransform: "none", color: "#1e1e1e" }} LinkComponent={NavLink} to='/'>About</Button>
-                <Button sx={{ textTransform: "none", color: "#1e1e1e" }} LinkComponent={NavLink} to='/'>Contact</Button>
-              </Box>
-
-              {/* Center: Logo */}
-              <Box sx={{ display: "flex", justifyContent: "center", flex: 1, position: 'absolute', top: '15px', left: '50%', transform: 'translateX(-50%)' }}>
-                <Link to={'/'}>
-                  <img src="logo/saraa-trends-bg.png" alt="Saaraa Trends Logo" className="img-fluid" style={{ height: "100px" }} />
-                </Link>
-              </Box>
-
-              {/* Right: Login, Seller, Cart */}
-              <Box sx={{ display: "flex", gap: "15px", alignItems: "center" }}>
-                {/* Login Dropdown */}
-                <div>
-                  {/* Login Button */}
-                  <Link to={'/login'}>
-                    <Button
-                      sx={{
-                        textTransform: "none",
-                        color: "#1e1e1e",
-                        background: "transparent",
-                        fontWeight: "bold",
-                        p: 0,
-                        alignItems: 'end'
-                      }}
-                    > Login
-                    </Button>
-                  </Link>
-                  <button onClick={handleClick} >
-                    <KeyboardArrowDown fontSize="small" />
-                  </button>
-
-                  {/* Dropdown Menu */}
-                  <Menu
-                    anchorEl={anchorEl2}
-                    open={Boolean(anchorEl2)}
-                    onClose={handleClose}
-                    PaperProps={{
-                      style: {
-                        borderRadius: "8px",
-                        boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-                        minWidth: "250px",
-                        marginTop: '25px',
-                        marginLeft: "auto",
-                      },
-                    }}
-                  >
-                    <MenuItem onClick={handleClose} sx={{ fontSize: "0.9rem" }}>
-                      <Link to="/register" style={{ textDecoration: "none", color: "inherit" }}>
-                        Create Account
-                      </Link>
-                    </MenuItem>
-                    <MenuItem onClick={handleClose} sx={{ fontSize: "0.9rem" }}>
-                      <Link to="/wishlist" style={{ textDecoration: "none", color: "inherit" }}>
-                        My Wishlist
-                      </Link>
-                    </MenuItem>
-                    <MenuItem onClick={handleClose} sx={{ fontSize: "0.9rem" }}>
-                      <Link to="/account/order" style={{ textDecoration: "none", color: "inherit" }}>
-                        My Orders
-                      </Link>
-                    </MenuItem>
-                    <MenuItem onClick={handleClose} sx={{ fontSize: "0.9rem" }}>
-                      <Link to="/cart" style={{ textDecoration: "none", color: "inherit" }}>
-                        My Cart
-                      </Link>
-                    </MenuItem>
-                  </Menu>
-
-                </div>
-
-                {/* Become a Seller Button */}
-                <Button
-                  LinkComponent={NavLink}
-                  to={"/seller/register"}
-                  sx={{
-                    textTransform: "none",
-                    "&:hover": { backgroundColor: "#43a047", color: "white" },
-                  }}
-                >
-                  Become a Seller
-                </Button>
-
-                {/* Shopping Cart Button */}
-                <IconButton sx={{ color: "#1e1e1e" }} onClick={handleCartOpen}>
-                  <Badge badgeContent={3} color="error">
-                    <ShoppingCart />
-                  </Badge>
-                </IconButton>
-              </Box>
-            </Box>
-
-            {/* Second Row */}
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
+              Login
+            </Link>
+            <Link
+              to="/seller/login"
+              className="text-white p-sm-2 px-md-3 py-md-2 md:text-md no-underline bg-gray-800 rounded-sm font-medium hover:bg-gray-700"
             >
-              {/* Left: Smaller Search Bar */}
-              <Box sx={{ flex: 0.4 }}>
-                <InputBase
-                  placeholder="Search..."
-                  startAdornment={<Search sx={{ marginRight: 1, color: "#888" }} />}
-                  sx={{
-                    width: "100%",
-                    padding: "5px 15px",
-                    background: "#fff",
-                    borderRadius: "20px",
-                    boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
-                  }}
-                />
-              </Box>
-
-              {/* Right: Category Dropdown */}
-              <Box>
-                <Button
-                  onClick={handleCategoryClick}
-                  endIcon={<ExpandMore />}
-                  sx={{ textTransform: "none", fontWeight: "500", color: "#1e1e1e" }}
-                >
-                  Categories
-                </Button>
-
-                <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleCategoryClose}>
-                  <MenuItem onClick={handleCategoryClose}>
-                    <Link to="/category/products" style={{ textDecoration: 'none', color: 'inherit' }}>
-                      Men
-                    </Link>
-                  </MenuItem>
-                  <MenuItem onClick={handleCategoryClose}>
-                    <Link to="/category/products" style={{ textDecoration: 'none', color: 'inherit' }}>
-                      Women
-                    </Link>
-                  </MenuItem>
-                  <MenuItem onClick={handleCategoryClose}>
-                    <Link to="/category/products" style={{ textDecoration: 'none', color: 'inherit' }}>
-                      Kids
-                    </Link>
-                  </MenuItem>
-                  <MenuItem onClick={handleCategoryClose}>
-                    <Link to="/category/products" style={{ textDecoration: 'none', color: 'inherit' }}>
-                      Accessories
-                    </Link>
-                  </MenuItem>
-                </Menu>
-
-              </Box>
-            </Box>
-
-            {/* Off-canvas Cart Drawer */}
-            <Drawer
-              anchor="right"
-              open={openCart}
-              onClose={handleCartClose}
-              sx={{
-                "& .MuiDrawer-paper": {
-                  width: 350,
-                  padding: "20px",
-                  backgroundColor: "#fff",
-                  borderLeft: "1px solid #ccc",
-                },
-              }}
-            >
-              {/* Close Button */}
-              <IconButton
-                sx={{ position: "absolute", top: "10px", right: "10px" }}
-                onClick={handleCartClose}
-              >
-                <Close />
-              </IconButton>
-
-              {/* Cart Details */}
-              <Typography variant="h6" sx={{ marginBottom: "20px", fontWeight: "bold" }}>
-                Your Cart
-              </Typography>
-              <List>
-                <ListItem>
-                  <ListItemText primary="Product 1" secondary="₹ 999" />
-                </ListItem>
-                <ListItem>
-                  <ListItemText primary="Product 2" secondary="₹ 1,299" />
-                </ListItem>
-                <ListItem>
-                  <ListItemText primary="Product 3" secondary="₹ 799" />
-                </ListItem>
-              </List>
-
-              <Box sx={{ marginTop: "20px" }}>
-                <Typography variant="h6">Total: ₹ 3,097</Typography>
-                <Button
-                  LinkComponent={NavLink}
-                  to='/cart'
-                  sx={{
-                    marginTop: "10px",
-                    width: "100%",
-                    backgroundColor: "#4caf50",
-                    color: "#fff",
-                    "&:hover": { backgroundColor: "#43a047" },
-                  }}
-                >
-                  View Cart
-                </Button>
-              </Box>
-            </Drawer>
-          </Box>
+              Become a Seller
+            </Link>
+            <IconButton className="text-gray-700" onClick={handleCartOpen}>
+              <Badge badgeContent={3} color="error">
+                <ShoppingCart />
+              </Badge>
+            </IconButton>
+          </div>
         </div>
+
+        {/* Second Row: Search Bar */}
+        <div className="sm:hidden px-6 py-2 md:py-3">
+          <div className="relative w-full max-w-3xl mx-auto">
+            <input
+              type="text"
+              placeholder="Search for products..."
+              className="w-full pl-10 pr-4 py-2 text-sm rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+            />
+            <Search className="absolute top-2.5 left-3 text-gray-400" />
+          </div>
+        </div>
+
+        {/* Third Row: Categories */}
+        <div className="px-6 pb-3 md:py-0">
+          <div className="flex justify-center md:justify-center xs:gap-2 sm:gap-6 md:gap-12 overflow-x-auto whitespace-nowrap">
+            {categories.map((category, index) => (
+              <Link
+                key={index}
+                to={`/category/${category.categoryName}`}  // use category.name for the URL
+                className="relative text-[1.12rem] text-gray-800 capitalize font-medium tracking-wide hover:text-gray-900 transition no-underline group"
+              >
+                {category.categoryName}'s  {/* Render the category name */}
+                <span
+                  className="absolute bottom-0 left-0 w-0 h-[1.3px] bg-gray-900 transition-all duration-300 group-hover:w-full"
+                ></span>
+              </Link>
+            ))}
+          </div>
+        </div>
+
       </div>
-    </>
+
+
+
+
+
+      {/* Cart Drawer */}
+      <Drawer
+        anchor="right"
+        open={openCart}
+        onClose={handleCartClose}
+        sx={{
+          "& .MuiDrawer-paper": {
+            width: "350px",
+            padding: "20px",
+            backgroundColor: "#fff",
+            borderLeft: "1px solid #ccc",
+          },
+        }}
+      >
+        <IconButton
+          className="absolute top-2 right-2"
+          onClick={handleCartClose}
+        >
+          <Close />
+        </IconButton>
+        <Typography variant="h6" className="font-bold mb-4">
+          Your Cart
+        </Typography>
+        <List>
+          <ListItem>
+            <ListItemText primary="Product 1" secondary="₹ 999" />
+          </ListItem>
+          <ListItem>
+            <ListItemText primary="Product 2" secondary="₹ 1,299" />
+          </ListItem>
+          <ListItem>
+            <ListItemText primary="Product 3" secondary="₹ 799" />
+          </ListItem>
+        </List>
+        <div className="mt-6">
+          <Typography variant="h6" className="font-bold">
+            Total: ₹ 3,097
+          </Typography>
+          <Link
+            to="/cart"
+            className="block w-full bg-green-500 text-white text-center py-2 rounded mt-3 hover:bg-green-600 transition"
+          >
+            View Cart
+          </Link>
+        </div>
+      </Drawer>
+    </div>
   );
 };
 

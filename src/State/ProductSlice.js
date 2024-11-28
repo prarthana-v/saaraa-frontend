@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { useDispatch } from "react-redux";
 const apiurl = import.meta.env.VITE_API_URL;
 import Cookies from "universal-cookie";
 const cookies = new Cookies();
@@ -9,6 +10,7 @@ export const fetchProducts = createAsyncThunk(
   "products/fetchProductsbyseller",
   async (_, { rejectWithValue }) => {
     try {
+      console.log(cookies);
       const token = cookies.get("sellertoken");
       console.log(token, "Token in Fetch Seller Products");
       if (!token) {
@@ -25,7 +27,6 @@ export const fetchProducts = createAsyncThunk(
           },
         }
       );
-
       return response.data;
     } catch (error) {
       console.log(error);
@@ -46,7 +47,6 @@ export const createProduct = createAsyncThunk(
       console.log(token, "Token in Create Product");
       if (!token) {
         console.log("token nathi");
-        throw new Error("Token not found. Please log in again.");
       }
       const response = await axios.post(
         `${apiurl}/product/add-product`,
@@ -100,10 +100,31 @@ export const fetchProductDetails = createAsyncThunk(
   }
 );
 
+export const fetchProductsByCategory = createAsyncThunk(
+  "products/fetchByCategory",
+  async (categoryName, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        `${apiurl}/product/by-category?categoryName=${categoryName}`
+      );
+      console.log(response.data, " by-catgory");
+      if (response.data.success === true) {
+        return { categoryName, products: response.data.data || [] }; // Use only the "data" array
+      } else {
+        return rejectWithValue(response.data.message); // Pass error message to the rejected state
+      }
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 // Initial state
 const initialState = {
   products: [],
   productDetails: null,
+  productsByCategory: {}, // Keyed by category name
+  errorByCategory: {},
   loading: false,
   token: null,
   error: null,
@@ -181,6 +202,35 @@ const productSlice = createSlice({
       .addCase(fetchProductDetails.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      });
+
+    builder
+      // Handle pending state
+      .addCase(fetchProductsByCategory.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      // Handle fulfilled state
+      .addCase(fetchProductsByCategory.fulfilled, (state, action) => {
+        const { categoryName, products } = action.payload;
+
+        // Check if there are existing products for this category
+        if (!state.productsByCategory[categoryName]) {
+          state.productsByCategory[categoryName] = products; // Store new products for the category
+        } else {
+          // Append new products to existing products in this category (prevent overwriting)
+          state.productsByCategory[categoryName] = [
+            ...state.productsByCategory[categoryName],
+            ...products,
+          ];
+        }
+      })
+      // Handle rejected state
+      .addCase(fetchProductsByCategory.rejected, (state, action) => {
+        state.loading = false;
+        const { categoryName } = action.meta.arg; // Retrieve the category name from thunk argument
+        state.errorByCategory[categoryName] =
+          action.payload || "Failed to fetch products";
       });
   },
 });

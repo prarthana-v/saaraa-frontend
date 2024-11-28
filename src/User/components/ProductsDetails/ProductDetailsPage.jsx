@@ -128,8 +128,8 @@ const ProductPage = () => {
         {/* Thumbnails Section */}
         <Grid item xs={12} md={2} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
           {product?.images?.map((image, index) => (
-            <div key={index} className="cursor-pointer mx-2">
-              <div className='border w-[5rem] h-[5rem] rounded-md'>
+            <div key={index} className="cursor-pointer mx-2 ">
+              <div className='border w-[5rem] h-[5rem] rounded-lg my-1 overflow-hidden'>
                 <img
                   src={image}
                   alt={`Thumbnail ${index}`}
@@ -163,7 +163,7 @@ const ProductPage = () => {
               <ArrowBack />
             </IconButton>
 
-            <div className="w-full shadow-lg h-[400px]">
+            <div className="w-full shadow-lg h-[500px]">
               <img
                 src={product?.images?.[activeImageIndex]}
                 alt=""
@@ -194,8 +194,10 @@ const ProductPage = () => {
 
 
         {/* Right: Product Details */}
+
         <Grid item xs={12} md={6}>
           <Box>
+            {/* Product Name */}
             <p className="poppins text-xl mb-2 font-semibold capitalize">
               {product.productName}
             </p>
@@ -205,12 +207,21 @@ const ProductPage = () => {
               {product.description}
             </p>
 
-            <p className="roboto font-normal text-xl">
-              MRP ₹{product.price} {/* Assuming price is in INR */}
-            </p>
+            {/* Pricing */}
+            <Box className="my-3">
+              <p className="roboto font-normal text-xl">
+                Final Price: ₹{product.price}
+              </p>
+              <p className="roboto font-light text-md line-through text-gray-500 ">
+                MRP: ₹{product.mrp}
+              </p>
+              <p className="roboto font-medium  text-md text-teal-600 mb-1">
+                Save ₹{product.mrp - product.price} ({Math.round(((product.mrp - product.price) / product.mrp) * 100)}% off)
+              </p>
+            </Box>
 
-            {/* Sizes (if available) */}
-            {product.sizes.length >= 0 && (
+            {/* Sizes */}
+            {product.sizes && product.sizes.length > 0 && (
               <Box>
                 <p className="roboto opacity-70 text-md capitalize">
                   Available Sizes:
@@ -227,23 +238,67 @@ const ProductPage = () => {
               </Box>
             )}
 
+
+
+            {/* Stock Availability */}
+            {/* <p className={`roboto text-md mt-3 ${product.stock > 0 ? "text-green-600" : "text-red-600"}`}>
+              {product.stock > 0 ? `${product.stock} items in stock` : "Out of stock"}
+            </p> */}
+
             {/* Action Buttons */}
-            <Stack direction="row" spacing={3} className="mt-">
-              <button class="shine-button" onClick={handleCart} disabled={cartLoading}>
-                {cartLoading ? 'adding' : 'Add To Cart'}
+            <Stack direction="row" spacing={3} className="mt-5">
+              <button className="shine-button" onClick={handleCart} disabled={cartLoading}>
+                {cartLoading ? "Adding..." : "Add To Cart"}
               </button>
-              {
-                cartError && <p className='text-red-500'>{cartError}</p>
-              }
-              <button class="shine-button">
-                Rent Now
-              </button>
+              {cartError && <p className="text-red-500">{cartError}</p>}
+              <button className="shine-button">Rent Now</button>
             </Stack>
 
-            <p className='roboto opacity-60 text-md mt-10 border-top pt-3'> Product Deatils :
+            {/* Divider and Additional Notes */}
+            <p className="roboto opacity-60 text-md mt-10 border-t pt-3">
+              Product Details:
             </p>
+            {/* Additional Product Details */}
+            <Box className="my-3">
+              {product.color && (
+                <p className="roboto text-md capitalize">
+                  Color: <span className="font-semibold">{product.color}</span>
+                </p>
+              )}
+              {product.sleeveLength && (
+                <p className="roboto text-md capitalize">
+                  Sleeve Length: <span className="font-semibold">{product.sleeveLength}</span>
+                </p>
+              )}
+              {product.material && (
+                <p className="roboto text-md capitalize">
+                  Material: <span className="font-semibold">{product.material}</span>
+                </p>
+              )}
+              {product.occasion && (
+                <p className="roboto text-md capitalize">
+                  Occasion: <span className="font-semibold">{product.occasion}</span>
+                </p>
+              )}
+              {product.pattern && (
+                <p className="roboto text-md capitalize">
+                  Pattern: <span className="font-semibold">{product.pattern}</span>
+                </p>
+              )}
+              {product.manufacturerDetails && (
+                <p className="roboto text-md capitalize">
+                  Manufacturer: <span className="font-semibold">{product.manufacturerDetails}</span>
+                </p>
+              )}
+              {product.packerDetails && (
+                <p className="roboto text-md capitalize">
+                  Packer: <span className="font-semibold">{product.packerDetails}</span>
+                </p>
+              )}
+            </Box>
           </Box>
         </Grid>
+
       </Grid>
 
       <div className="lg:px-8 lg:mt-20">

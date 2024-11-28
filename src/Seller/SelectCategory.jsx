@@ -24,7 +24,7 @@ const SelectCategoryPage = () => {
   const handleSearchChange = (e) => setSearch(e.target.value.toLowerCase());
 
   const filteredCategories = categories.filter((category) =>
-    category.name.toLowerCase().includes(search)
+    category.categoryName.toLowerCase().includes(search)
   );
 
   const handleCategoryClick = (category) => {
@@ -58,7 +58,7 @@ const SelectCategoryPage = () => {
                     selected={selectedCategory == category}
                     className="border-bottom"
                   >
-                    <ListItemText primary={category.name} />
+                    <ListItemText primary={category.categoryName} />
                   </ListItemButton>
                 ))
               )}
@@ -74,7 +74,7 @@ const SelectCategoryPage = () => {
                   sx={{ mb: 2, fontWeight: 600 }}
                   className="poppins"
                 >
-                  Selected Category: {selectedCategory.name}
+                  Selected Category: {selectedCategory.categoryName}
                 </Typography>
                 <Link to={'/seller/products/add'} state={selectedCategory} >
                   <Button variant="contained" color="primary" sx={{ width: 'fit-content' }}>

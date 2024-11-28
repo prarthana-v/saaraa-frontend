@@ -1,22 +1,50 @@
-import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchProducts } from '../State/ProductSlice';
+import React, { useState, useEffect } from 'react';
+// import { fetchProducts } from '../State/ProductSlice';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Button } from '@mui/material';
 import ProductViewModal from './components/ProductViewModal';
+const apiurl = import.meta.env.VITE_API_URL
+import Cookies from "js-cookie";
+import axios from 'axios'
 
 const ProductList = () => {
-  const dispatch = useDispatch();
-
-  const { products, loading, error } = useSelector((state) => state.products);
-  useSelector((state) => console.log(state.products));
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   useEffect(() => {
-    dispatch(fetchProducts()); // Fetch products on initial render
-  }, [dispatch]);
+    // Fetch products from the API
+    const fetchProducts = async () => {
+      try {
+        // Get token from cookies or session (replace with actual token retrieval logic)
+        const token = Cookies.get("sellertoken"); // Example: Fetch from localStorage or cookies
+        if (!token) {
+          console.log("token nathi fetch products ma!!")
+        }
 
-  // Debugging: log the products, loading, and error state
-  console.log("Products:", products);
-  console.log("Loading:", loading);
-  console.log("Error:", error);
+        // Make API call to fetch products
+        const response = await axios.get(`${apiurl}/product/getproductsbyseller`, {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`, // Include token in request header
+          },
+        });
+
+        // Update local state with fetched products
+        setProducts(response.data);
+      } catch (error) {
+        setError(error.response?.data?.message || error.message);
+      } finally {
+        setLoading(false); // Set loading to false once the request is complete
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div className="text-red-500">{`${error}`}</div>;
+  if (products.length === 0) return <div>No products found.</div>;
+
 
   return (
     <div className="product-list">
@@ -41,38 +69,62 @@ const ProductList = () => {
             </TableHead>
             <TableBody>
               {products.map((product) => (
-                console.log(product),
-                <TableRow TableRow key={product._id} >
+                <TableRow key={product._id}>
+                  {/* Product Image */}
                   <TableCell>
-                    <img
-                      src={product.images[0]}
-                      alt={product.name}
-                      className="h-12 w-12 object-cover rounded-md"
-                    />
+                    {product.images && product.images[0] ? (
+                      <img
+                        src={product.images[0]}
+                        alt={product.name || "Product"}
+                        className="h-12 w-12 object-cover rounded-md"
+                      />
+                    ) : (
+                      <span className="text-gray-500">No image</span>
+                    )}
                   </TableCell>
-                  <TableCell>{product.categoryName}</TableCell>
+
+                  {/* Product Category */}
+                  <TableCell>{product.categoryName || "No category"}</TableCell>
+
+                  {/* Product Details */}
                   <TableCell>
                     <div>
-                      <span className="font-medium text-gray-800">{product.productName}</span>
+                      <span className="font-medium text-gray-800">{product.productName || "No name"}</span>
                       <br />
-                      <span className="text-sm text-gray-500">{product.description}</span>
+                      <span className="text-sm text-gray-500">{product.description || "No description"}</span>
                     </div>
                   </TableCell>
+
+                  {/* Product ID */}
                   <TableCell>{product._id}</TableCell>
-                  <TableCell><Button variant='outlined' color='error' disabled sx={{
-                    color: (theme) => theme.palette.error.main,
-                    borderColor: (theme) => theme.palette.error.main,
-                    '&.Mui-disabled': {
-                      color: (theme) => theme.palette.error.main,
-                      borderColor: (theme) => theme.palette.error.main,
-                    },
-                  }}>Pending</Button></TableCell>
+
+                  {/* Status Button */}
+                  <TableCell>
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      disabled
+                      sx={{
+                        color: (theme) => theme.palette.error.main,
+                        borderColor: (theme) => theme.palette.error.main,
+                        "&.Mui-disabled": {
+                          color: (theme) => theme.palette.error.main,
+                          borderColor: (theme) => theme.palette.error.main,
+                        },
+                      }}
+                    >
+                      Pending
+                    </Button>
+                  </TableCell>
+
+                  {/* Product Modal */}
                   <TableCell>
                     <ProductViewModal product={product} />
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
+
           </Table>
         </TableContainer>
       )
