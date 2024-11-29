@@ -107,7 +107,7 @@ export const fetchProductsByCategory = createAsyncThunk(
       const response = await axios.get(
         `${apiurl}/product/by-category?categoryName=${categoryName}`
       );
-      console.log(response.data, " by-catgory");
+      console.log(response.data.data, " by-catgory");
       if (response.data.success === true) {
         return { categoryName, products: response.data.data || [] }; // Use only the "data" array
       } else {
@@ -141,6 +141,11 @@ const productSlice = createSlice({
     clearProductDetails: (state) => {
       state.productDetails = null;
       state.error = null;
+    },
+    clearCategory(state, action) {
+      const categoryName = action.payload;
+      state.productsByCategory[categoryName] = [];
+      state.errorByCategory[categoryName] = null;
     },
   },
   extraReducers: (builder) => {
@@ -208,29 +213,22 @@ const productSlice = createSlice({
       // Handle pending state
       .addCase(fetchProductsByCategory.pending, (state) => {
         state.loading = true;
-        state.error = null;
       })
       // Handle fulfilled state
       .addCase(fetchProductsByCategory.fulfilled, (state, action) => {
         const { categoryName, products } = action.payload;
-
-        // Check if there are existing products for this category
-        if (!state.productsByCategory[categoryName]) {
-          state.productsByCategory[categoryName] = products; // Store new products for the category
-        } else {
-          // Append new products to existing products in this category (prevent overwriting)
-          state.productsByCategory[categoryName] = [
-            ...state.productsByCategory[categoryName],
-            ...products,
-          ];
-        }
+        state.productsByCategory[categoryName] = products; // Store new products for the category
+        state.loading = false;
+        state.errorByCategory[categoryName] = null;
       })
       // Handle rejected state
       .addCase(fetchProductsByCategory.rejected, (state, action) => {
+        const categoryName = action.meta.arg; // Retrieve the category name from thunk arguments
+        console.log("Category (rejected):", categoryName);
+        console.log("Error Payload:", action.payload);
         state.loading = false;
-        const { categoryName } = action.meta.arg; // Retrieve the category name from thunk argument
         state.errorByCategory[categoryName] =
-          action.payload || "Failed to fetch products";
+          action.payload || action.error.message;
       });
   },
 });

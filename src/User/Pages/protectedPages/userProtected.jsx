@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import axios from 'axios';
-// const apiurl = import.meta.env.VITE_API_URL
+const apiurl = import.meta.env.VITE_API_URL
 // Hook to check if seller is authenticated
 const useAuth = async () => {
   try {
-    const response = await axios.get(`http://localhost:5000/api/auth/check-auth`, {
+    const response = await axios.get(`${apiurl}/auth/check-auth`, {
       withCredentials: true, // Ensure cookies are sent
     });
     return response.data.success; // Check if seller is authenticated

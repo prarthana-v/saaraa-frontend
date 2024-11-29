@@ -1,19 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ShoppingCart, Search, ExpandMore, Close } from "@mui/icons-material";
+import { ShoppingCart, Search, Close } from "@mui/icons-material";
 import { Drawer, IconButton, Typography, Badge, List, ListItem, ListItemText } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCategories } from "../../../../State/CategorySlice";
+import { CgProfile } from "react-icons/cg";
+import { Avatar } from '@mui/material'
+import { getUserRecord } from "../../../../State/UserAuthSlice";
 
 const Navbar = () => {
   const [openCart, setOpenCart] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const dispatch = useDispatch()
   const handleCartOpen = () => setOpenCart(true);
   const handleCartClose = () => setOpenCart(false);
   const { categories } = useSelector((state) => state.category)
-  console.log(categories)
+  const user = useSelector((state) => state?.userauth?.user?.user?.username);
+  // useSelector((state) => console.log(state.userauth?.user?.user?.username))
+  const firstInitial = user?.slice(0, 1) || <CgProfile />;
+  // console.log(categories)
   // Sample categories array
   useEffect(() => {
+    dispatch(getUserRecord())
     dispatch(fetchCategories())
   }, [dispatch])
 
@@ -34,6 +42,7 @@ const Navbar = () => {
           </div>
 
           <div className="hidden sm:flex sm:w-2/4 px-6 py-2 md:py-3">
+
             <div className="relative mx-auto w-full">
               <input
                 type="text"
@@ -45,29 +54,48 @@ const Navbar = () => {
           </div>
 
           {/* Right: Login, Become a Seller, Cart */}
-          <div className="flex xs:gap-3 sm:gap-3 md:gap-4">
-            <Link
-              to="/login"
-              className="text-white p-sm-2 px-md-3 py-md-2 md:text-md r no-underline bg-gray-800 rounded-sm font-medium hover:bg-gray-700"
-            >
-              Login
-            </Link>
+          <div className="flex xs:gap-1 sm:gap-3 md:gap-4 justify-center items-center">
+            <IconButton className="text-gray-900" onClick={handleCartOpen}>
+              <Badge badgeContent={3} color="error">
+                <ShoppingCart sx={{ color: 'black' }} />
+              </Badge>
+            </IconButton>
             <Link
               to="/seller/login"
-              className="text-white p-sm-2 px-md-3 py-md-2 md:text-md no-underline bg-gray-800 rounded-sm font-medium hover:bg-gray-700"
+              className="hidden lg:flex text-white lg:py-2 lg:px-6 xs:rounded-3xl no-underline bg-gray-800 rounded-sm font-medium hover:bg-gray-700"
             >
               Become a Seller
             </Link>
-            <IconButton className="text-gray-700" onClick={handleCartOpen}>
-              <Badge badgeContent={3} color="error">
-                <ShoppingCart />
-              </Badge>
-            </IconButton>
+
+            {/* Show Login Button if the user is not logged in */}
+            {!user ? (
+              <Link
+                to="/login"
+                className="text-white xs:py-2 xs:px-6 no-underline bg-gray-800 xs:rounded-3xl rounded-sm font-medium hover:bg-gray-700"
+              >
+                Login
+              </Link>
+            ) : (
+              <Link className="no-underline" to={'/profile'}>
+                <Avatar
+                  className="text-white"
+                  sx={{
+                    width: 50,
+                    height: 50,
+                    bgcolor: '#df988f',
+                    paddingBottom: '5px',
+                  }}
+                >
+                  {firstInitial}
+                </Avatar>
+              </Link>
+
+            )}
           </div>
         </div>
 
         {/* Second Row: Search Bar */}
-        <div className="sm:hidden px-6 py-2 md:py-3">
+        <div className="sm:hidden px-6 pb-2 pt-3 md:py-3">
           <div className="relative w-full max-w-3xl mx-auto">
             <input
               type="text"
@@ -79,24 +107,24 @@ const Navbar = () => {
         </div>
 
         {/* Third Row: Categories */}
-        <div className="px-6 pb-3 md:py-0">
-          <div className="flex justify-center md:justify-center xs:gap-2 sm:gap-6 md:gap-12 overflow-x-auto whitespace-nowrap">
+        <div className="px-6 pt-2 pb-3 md:py-0">
+          <div className="flex justify-center md:justify-center xs:gap-5 sm:gap-6 md:gap-9 overflow-x-auto whitespace-nowrap">
             {categories.map((category, index) => (
               <Link
                 key={index}
-                to={`/category/${category.categoryName}`}  // use category.name for the URL
-                className="relative text-[1.12rem] text-gray-800 capitalize font-medium tracking-wide hover:text-gray-900 transition no-underline group"
+                to={`/category/${category.categoryName}`} // use category.name for the URL
+                className="relative text-[1.12rem] text-gray-800 capitalize font-medium tracking-wide no-underline px-3 border-2 border-gray-300 hover:border-gray-900  rounded-pill"
               >
                 {category.categoryName}'s  {/* Render the category name */}
-                <span
+                {/* <span
                   className="absolute bottom-0 left-0 w-0 h-[1.3px] bg-gray-900 transition-all duration-300 group-hover:w-full"
-                ></span>
+                ></span> */}
               </Link>
             ))}
           </div>
         </div>
 
-      </div>
+      </div >
 
 
 
@@ -147,8 +175,8 @@ const Navbar = () => {
             View Cart
           </Link>
         </div>
-      </Drawer>
-    </div>
+      </Drawer >
+    </div >
   );
 };
 

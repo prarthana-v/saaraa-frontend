@@ -69,7 +69,7 @@ const LoginForm = () => {
         await checkAuth();
       } else {
         // Handle login failure
-        const errorMessage = result.payload?.error || "Login failed!";
+        const errorMessage = result.payload || "Login failed!";
         toast.error(errorMessage);
       }
     } catch (error) {

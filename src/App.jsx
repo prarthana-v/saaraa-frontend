@@ -39,12 +39,14 @@ import CustomerRouter from './Router/CustomerRouter.jsx'
 import SellerRouter from './Router/SellerRouter.jsx'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ScrollToTop from './User/Pages/ScrollToTop.jsx';
 
 
 const App = () => {
   return (
     <div>
       <BrowserRouter>
+        <ScrollToTop />
         <Routes>
           <Route path='/*' element={<CustomerRouter />}></Route>
           <Route path='/seller/*' element={<SellerRouter />} />

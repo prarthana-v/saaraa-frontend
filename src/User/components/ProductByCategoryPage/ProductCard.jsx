@@ -7,7 +7,7 @@ const Productcard = ({ product }) => {
   const navigate = useNavigate('')
   return (
     <a href={`/product/${product._id}`} target='_blank' className='no-underline'>
-      <div className="productCard max-w-[15rem] m-3 transition-all cursor-pointer">
+      <div className="productCard max-w-full  my-3 transition-all cursor-pointer">
         <div className="h-[20rem]">
           <img src={product.images[0]} className='w-full h-full object-cover object-left-top' alt="" />
         </div>

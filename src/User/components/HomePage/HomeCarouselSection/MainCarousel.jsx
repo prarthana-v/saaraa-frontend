@@ -12,11 +12,14 @@ import { Link } from 'react-router-dom';
 const HomeCarousel = ({ sectionName, category }) => {
   console.log(category)
   const dispatch = useDispatch()
-  useSelector((state) => console.log(state.products))
+  useSelector((state) => console.log(state.products.productsByCategory))
   const { productsByCategory, loading, errorByCategory } = useSelector((state) => state.products);
 
   useEffect(() => {
     dispatch(fetchProductsByCategory(category))
+    return () => {
+      dispatch({ type: 'products/clearCategory', payload: category });
+    };
   }, [dispatch, category]);
 
   // Access the products and error for the current category
@@ -27,8 +30,8 @@ const HomeCarousel = ({ sectionName, category }) => {
   if (loading) return <div>Loading...</div>;
 
   // Error handling
-  if (errorForCategory && products.length === 0) {
-    return <div className="text-red-500">{`Error: ${errorForCategory}`}</div>;
+  if (errorForCategory && errorByCategory[category]) {
+    return <div className="text-red-500">{` ${errorByCategory[category].message}-${category}`}</div>;
   }
 
   // No products available
@@ -42,7 +45,7 @@ const HomeCarousel = ({ sectionName, category }) => {
             <h3 className='poppins px-0 ps-2 mb-0'>{sectionName}</h3>
           </div>
           <div className='col-2 flex justify-end'>
-            <Link to={`/${category}/`} className="text-white px-4 py-2 rounded-pill text-md bg-gray-800 font-medium no-underline text-md">
+            <Link to={`/category/${category}`} className="text-white px-4 py-2 rounded-pill text-md bg-gray-800 font-medium no-underline text-md">
               View All
             </Link>
           </div>
@@ -52,7 +55,7 @@ const HomeCarousel = ({ sectionName, category }) => {
           {/* Product Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {products.map((product, index) => (
-              <a target='_blank' href={`/product/${product._id}`} className="cursor-pointer no-underline">
+              <a target='_blank' href={`/product/${product._id}`} key={product._id} className="cursor-pointer no-underline">
                 <div key={index} className="relative group border rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition" >
 
                   {/* Image Container */}
