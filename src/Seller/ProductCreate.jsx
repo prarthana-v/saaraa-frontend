@@ -42,6 +42,7 @@ const AddProductPage = () => {
     fit: "",
     price: "",
     stock: "",
+    skuid: "",
     mrp: '',
     manufacturerDetails: "",
     packerDetails: "",
@@ -105,7 +106,7 @@ const AddProductPage = () => {
       formDataToSend.append("images", file);
     });
 
-    console.log("FormData to send:", formData);
+    console.log("FormData to send:", formDataToSend);
 
     let response = await dispatch(createProduct(formDataToSend));
 
@@ -128,7 +129,7 @@ const AddProductPage = () => {
     })
     setSelectedSizes([]);
     toast.success("Product added successfully!");
-    navigate('/seller/products')
+    // navigate('/seller/products')
   };
 
   return (
@@ -170,9 +171,9 @@ const AddProductPage = () => {
                         <Grid item xs={12} sm={6}>
                           <div style={{ display: "flex", alignItems: "center" }}>
                             <TextField
-                              label="ProductId/SKUid"
+                              label="ProductId/SKUid  "
                               name="skuid"
-                              value={formData.skuid}
+                              value={formData.skuid || ""}
                               onChange={handleInputChange}
                               fullWidth
 
