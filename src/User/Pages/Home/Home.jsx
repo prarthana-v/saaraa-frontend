@@ -21,7 +21,7 @@ const Home = () => {
       </div>
       <Routes>
         <Route path='/' element={<HomePage />}></Route>
-        <Route path='/category/:categoryName' element={<Product />} />
+        <Route path='/:categoryName' element={<Product />} />
         <Route path='/product/:productId' element={< ProductPage />} />
         <Route element={<UserProtected />}>
           <Route path='/cart' element={<Cart />} />

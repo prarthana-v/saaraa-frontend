@@ -47,7 +47,7 @@ const Heroslider = () => {
     // prevArrow: <PrevArrow />  // Add custom Previous Arrow
   };
   return (
-    <div className="slider-container mt-[9rem]">
+    <div className="slider-container mt-[7.5rem]">
 
       <Slider {...settings}>
         {

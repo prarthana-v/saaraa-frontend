@@ -1,13 +1,3 @@
-.category-image {
-  width: 80%;
-  height: auto;
-  border-radius: 50%;
-  overflow: hidden;
-  background-color: rgb(255, 255, 255);
-}
-.category-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  border-radius: 50%;
+.image-catgeory {
+  border: 2px solid black;
 }

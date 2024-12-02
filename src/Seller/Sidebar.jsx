@@ -45,7 +45,7 @@ const ResponsiveSidebar = () => {
             to={item.path}
             key={item.text}
             style={{ textDecoration: 'none', color: '#ffffff' }}
-            activeStyle={{ backgroundColor: '#3a3a4a' }} // Active item background
+
           >
             <ListItem button sx={{ mt: 2, py: 0 }}>
               <ListItemIcon sx={{ color: '#000' }}>{item.icon}</ListItemIcon>

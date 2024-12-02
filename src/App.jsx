@@ -40,6 +40,7 @@ import SellerRouter from './Router/SellerRouter.jsx'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ScrollToTop from './User/Pages/ScrollToTop.jsx';
+import SuperAdminRouter from './Router/SuperAdminRouter.jsx';
 
 
 const App = () => {
@@ -50,6 +51,7 @@ const App = () => {
         <Routes>
           <Route path='/*' element={<CustomerRouter />}></Route>
           <Route path='/seller/*' element={<SellerRouter />} />
+          <Route path='/superadmin/*' element={<SuperAdminRouter />} />
         </Routes>
       </BrowserRouter>
       {/* Add ToastContainer here to make it accessible throughout the app */}

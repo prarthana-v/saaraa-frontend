@@ -26,10 +26,10 @@ const Navbar = () => {
   }, [dispatch])
 
   return (
-    <div className="w-full bg-white fixed top-0 shadow-lg z-50">
-      <div className="bg-light border-b">
+    <div className="w-full bg-navbar fixed top-0 shadow-lg z-50 montserrat-a">
+      <div className="bg-navbar border-b">
         {/* First Row: Logo, Login, and Become a Seller */}
-        <div className="flex items-center justify-between px-6 pt-3 md:justify-around">
+        <div className="flex items-center justify-between px-6 py-3 md:justify-around">
           {/* Logo */}
           <div className="flex-shrink-0">
             <Link to="/">
@@ -47,7 +47,7 @@ const Navbar = () => {
               <input
                 type="text"
                 placeholder="Search for products..."
-                className="pl-10 pr-4 py-2 text-md w-full rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                className="pl-10 pr-4 py-2 text-md w-full rounded-full border border-gray-300 focus:outline-none focus:ring-1 focus:ring-pprimary"
               />
               <Search className="absolute top-2.5 left-3 text-gray-400" />
             </div>
@@ -100,29 +100,13 @@ const Navbar = () => {
             <input
               type="text"
               placeholder="Search for products..."
-              className="w-full pl-10 pr-4 py-2 text-sm rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+              className="w-full pl-10 pr-4 py-2 text-sm rounded-full border border-gray-300 focus:outline-none focus:ring-1 focus:ring-pprimary"
             />
             <Search className="absolute top-2.5 left-3 text-gray-400" />
           </div>
         </div>
 
-        {/* Third Row: Categories */}
-        <div className="px-6 pt-2 pb-3 md:py-0">
-          <div className="flex justify-center md:justify-center xs:gap-5 sm:gap-6 md:gap-9 overflow-x-auto whitespace-nowrap">
-            {categories.map((category, index) => (
-              <Link
-                key={index}
-                to={`/category/${category.categoryName}`} // use category.name for the URL
-                className="relative text-[1.12rem] text-gray-800 capitalize font-medium tracking-wide no-underline px-3 border-2 border-gray-300 hover:border-gray-900  rounded-pill"
-              >
-                {category.categoryName}'s  {/* Render the category name */}
-                {/* <span
-                  className="absolute bottom-0 left-0 w-0 h-[1.3px] bg-gray-900 transition-all duration-300 group-hover:w-full"
-                ></span> */}
-              </Link>
-            ))}
-          </div>
-        </div>
+
 
       </div >
 
