@@ -1,42 +1,36 @@
 import React, { useEffect, useState } from "react";
 import { FaEdit, FaTrashAlt, FaPlus } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { fetchCategories } from "../../State/CategorySlice";
+import { Link, useNavigate } from "react-router-dom";
+import { fetchCategories, removeCategory } from "../../State/CategorySlice";
+import axios from "axios";
+import { toast } from "react-toastify";
+const apiurl = import.meta.env.VITE_API_URL
+
 
 const CategoriesPage = () => {
-  const navigate = useDispatch()
+  const navigate = useNavigate()
   const dispatch = useDispatch()
-  useSelector((state) => console.log(state.category))
-  const [categories, setCategories] = useState([
-    {
-      id: 1,
-      name: "Electronics",
-      image:
-        "https://via.placeholder.com/50", // Replace with actual image URL
-    },
-    {
-      id: 2,
-      name: "Fashion",
-      image:
-        "https://via.placeholder.com/50", // Replace with actual image URL
-    },
-    {
-      id: 3,
-      name: "Home & Kitchen",
-      image:
-        "https://via.placeholder.com/50", // Replace with actual image URL
-    },
-  ]);
+  const { categories } = useSelector((state) => state?.category)
 
-  const handleEdit = (id) => {
-    alert(`Edit category with ID: ${id}`);
-    // Implement Edit functionality here
-  };
+  const handleDelete = async (id) => {
+    try {
+      const confirmDelete = window.confirm("Are you sure you want to delete this category?");
+      if (!confirmDelete) return;
 
-  const handleDelete = (id) => {
-    if (window.confirm("Are you sure you want to delete this category?")) {
-      setCategories(categories.filter((category) => category.id !== id));
+      const response = await axios.delete(`${apiurl}/category/delete-category/${id}`, {
+        withCredentials: true, // Ensure credentials (cookies) are sent
+      });
+      console.log(response, 'res delete')
+      if (response?.data?.success === true) {
+        toast.success(response?.data?.message);
+        dispatch(removeCategory(id))
+      } else {
+        toast.error("Failed to delete the category. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error while deleting the category:", error);
+      alert("An error occurred while deleting the category.");
     }
   };
 
@@ -73,27 +67,26 @@ const CategoriesPage = () => {
             {categories.length > 0 ? (
               categories.map((category) => (
                 <tr
-                  key={category.id}
+                  key={category._id}
                   className="border-b border-gray-700 hover:bg-gray-700"
                 >
                   <td className="p-2">
                     <img
                       src={category.image}
                       alt={category.name}
-                      className="w-12 h-12 rounded-md"
+                      className="w-14 h-14 object-contain rounded-md"
                     />
                   </td>
-                  <td className="p-2">{category.id}</td>
-                  <td className="p-2">{category.name}</td>
+                  <td className="p-2">{category._id}</td>
+                  <td className="p-2">{category.categoryName}</td>
                   <td className="p-2 flex items-center space-x-4">
-                    <button
-                      onClick={() => handleEdit(category.id)}
+                    <Link to={`/superadmin/categories/edit/${category._id}`}
                       className="text-yellow-400 hover:text-yellow-600 text-xl"
                     >
                       <FaEdit />
-                    </button>
+                    </Link>
                     <button
-                      onClick={() => handleDelete(category.id)}
+                      onClick={() => handleDelete(category._id)}
                       className="text-red-500 hover:text-red-700 text-xl"
                     >
                       <FaTrashAlt />
