@@ -46,7 +46,7 @@ const Navbar = () => {
               <div className="flex-shrink-0">
                 <Link to="/">
                   <img
-                    src="https://res.cloudinary.com/duxafj5j5/image/upload/v1731158192/category/w5siphjkoo9fprtbda4s.png"
+                    src="https://res.cloudinary.com/duxafj5j5/image/upload/v1733401863/saraa-trends-bg_chr16j.png"
                     alt="Saaraa Trends Logo"
                     className="w-auto h-[5.5rem]"
                   />
