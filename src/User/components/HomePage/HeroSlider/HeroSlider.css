@@ -18,9 +18,15 @@ body {
 /* Slider item styling */
 .slider {
   width: 100%;
-  height: 580px;
+  height: 300px;
 }
 
+@media (min-width: 680px) {
+  .slider {
+    width: 100%;
+    height: 580px;
+  }
+}
 .slider-image {
   width: 100%;
   height: 100%;

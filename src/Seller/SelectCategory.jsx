@@ -10,15 +10,21 @@ import {
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCategories } from '../State/CategorySlice';
+import { fetchSubcategories } from '../State/SubCategorySlice';
 
 const SelectCategoryPage = () => {
   const [search, setSearch] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedSubcategory, setSelectedSubcategory] = useState(null);
+
   const dispatch = useDispatch();
-  const { categories, loading, error } = useSelector((state) => state.category);
+  const { categories, loading: categoryLoading, error: categoryError } = useSelector((state) => state.category);
+  const { subcategories, loading: subcategoryLoading, error: subcategoryError } = useSelector((state) => state.subcategory);
+
 
   useEffect(() => {
     dispatch(fetchCategories());
+    dispatch(fetchSubcategories());
   }, [dispatch]);
 
   const handleSearchChange = (e) => setSearch(e.target.value.toLowerCase());
@@ -27,8 +33,19 @@ const SelectCategoryPage = () => {
     category.categoryName.toLowerCase().includes(search)
   );
 
+  const filteredSubcategories = selectedCategory
+    ? subcategories.filter((sub) => sub.categoryId._id === selectedCategory._id)
+    : [];
+  console.log(filteredSubcategories)
+
   const handleCategoryClick = (category) => {
+    console.log(category)
     setSelectedCategory(category);
+    setSelectedSubcategory(null); // Reset subcategory selection
+  };
+
+  const handleSubcategoryClick = (subcategory) => {
+    setSelectedSubcategory(subcategory);
   };
 
   return (
@@ -39,23 +56,22 @@ const SelectCategoryPage = () => {
           <Box sx={{ flex: 1 }} className="bg-white p-3">
             <Typography
               variant="h5"
-              className="bg-light p-3 opacity-70 poppins"
+              className="poppins"
               sx={{ mb: 2, fontWeight: 600 }}
             >
               Categories
             </Typography>
             <List>
-              {loading ? (
+              {categoryLoading ? (
                 <Typography>Loading categories...</Typography>
-              ) : error ? (
-                <Typography color="error">Error: {error}</Typography>
+              ) : categoryError ? (
+                <Typography color="error">Error: {categoryError}</Typography>
               ) : (
                 filteredCategories.map((category) => (
-                  // console.log("filtered", category),
                   <ListItemButton
                     key={category._id}
                     onClick={() => handleCategoryClick(category)}
-                    selected={selectedCategory == category}
+                    selected={selectedCategory === category}
                     className="border-bottom"
                   >
                     <ListItemText primary={category.categoryName} />
@@ -65,8 +81,8 @@ const SelectCategoryPage = () => {
             </List>
           </Box>
 
-          {/* Add Product Column */}
-          <Box sx={{ flex: 2 }} className="bg-white p-3">
+          {/* Middle Column: Subcategories */}
+          <Box sx={{ flex: 1 }} className="bg-white p-3">
             {selectedCategory ? (
               <>
                 <Typography
@@ -74,24 +90,76 @@ const SelectCategoryPage = () => {
                   sx={{ mb: 2, fontWeight: 600 }}
                   className="poppins"
                 >
-                  Selected Category: {selectedCategory.categoryName}
+                  Subcategories for: {selectedCategory.categoryName}
                 </Typography>
-                <Link to={'/seller/products/add'} state={selectedCategory} >
-                  <Button variant="contained" color="primary" sx={{ width: 'fit-content' }}>
-                    Add Product
-                  </Button>
-                </Link>
+                <List>
+                  {subcategoryLoading ? (
+                    <Typography>Loading subcategories...</Typography>
+                  ) : subcategoryError ? (
+                    <Typography color="error">Error: {subcategoryError}</Typography>
+                  ) : filteredSubcategories.length > 0 ? (
+                    filteredSubcategories.map((subcategory) => (
+                      <ListItemButton
+                        key={subcategory._id}
+                        onClick={() => handleSubcategoryClick(subcategory)}
+                        selected={selectedSubcategory === subcategory}
+                        className="border-bottom"
+                      >
+                        <ListItemText primary={subcategory.subcategoryName} />
+                      </ListItemButton>
+                    ))
+                  ) : (
+                    <Typography>No subcategories available.</Typography>
+                  )}
+                </List>
 
               </>
             ) : (
               <Typography variant="body1" sx={{ textAlign: 'center' }}>
-                Please select a category to add a product.
+                Please select a category to view subcategories.
+              </Typography>
+            )}
+          </Box>
+
+          {/* Right Column: Add Product */}
+          <Box sx={{ flex: 1 }} className="bg-white p-3">
+            {selectedSubcategory ? (
+              <>
+                <Typography
+                  variant="h5"
+                  sx={{ mb: 2, fontWeight: 600 }}
+                  className="poppins"
+                >
+                  Selected Subcategory: {selectedSubcategory.subcategoryName}
+                </Typography>
+                <img
+                  src={selectedSubcategory.image}
+                  alt={selectedSubcategory.subcategoryName}
+                  className="w-full h-96 object-contain rounded mb-4"
+                />
+                <div className='text-center'>
+                  <Link
+                    to={'/seller/products/add'}
+                    state={{
+                      category: selectedCategory,
+                      subcategory: selectedSubcategory,
+                    }}
+                  >
+                    <Button variant="contained" color="primary">
+                      Add Product
+                    </Button>
+                  </Link>
+                </div>
+              </>
+            ) : (
+              <Typography variant="body1" sx={{ textAlign: 'center' }}>
+                Please select a subcategory to add a product.
               </Typography>
             )}
           </Box>
         </Box>
       </div>
-    </div >
+    </div>
   );
 };
 

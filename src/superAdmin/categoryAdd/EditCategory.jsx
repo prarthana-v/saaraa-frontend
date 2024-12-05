@@ -7,6 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 const EditCategoryForm = () => {
   const [categoryName, setCategoryName] = useState('');
   const [categoryImage, setCategoryImage] = useState(null);
+  const [imageFile, setImageFile] = useState(null)
   const [error, setError] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ const EditCategoryForm = () => {
   // Fetch category data when component mounts
   useEffect(() => {
     if (id) {
+      console.log(id)
       dispatch(fetchCategoryById(id)); // Fetch category by ID when the component mounts
     }
   }, [id, dispatch]);
@@ -40,6 +42,7 @@ const EditCategoryForm = () => {
     const file = e.target.files[0];
     if (file) {
       setCategoryImage(URL.createObjectURL(file)); // Preview the selected image
+      setImageFile(file)
     }
   };
 
@@ -51,17 +54,19 @@ const EditCategoryForm = () => {
       return;
     }
     const lowercasedCategoryName = categoryName.toLowerCase(); // Converts to lowercase
-
-
-
     const formData = new FormData();
     formData.append('categoryName', lowercasedCategoryName);
-    formData.append('categoryImage', e.target.categoryImage.files[0]);
+
+    if (imageFile) {
+      formData.append('categoryImage', imageFile);
+    }
+
 
     // Log FormData contents
     for (let pair of formData.entries()) {
       console.log(`${pair[0]}: ${pair[1]}`);
     }
+
     try {
       const result = await dispatch(editCategory({ id, formData }));
       if (result?.payload?.success === true) {

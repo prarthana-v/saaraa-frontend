@@ -6,10 +6,8 @@ export const fetchCategories = createAsyncThunk(
   "superadmin/fetchCategories",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${apiurl}/category/categories`, {
-        withCredentials: true,
-      });
-      console.log("categories", response.data);
+      const response = await axios.get(`${apiurl}/category/categories`);
+      // console.log("categories", response.data);
       return response.data.categories;
     } catch (error) {
       return rejectWithValue(
@@ -63,11 +61,13 @@ export const editCategory = createAsyncThunk(
   "category/editCategory",
   async ({ id, formData }, { rejectWithValue }) => {
     try {
+      console.log(id, formData);
       const response = await axios.put(
         `${apiurl}/category/update-category/${id}`,
         formData,
         {
           withCredentials: true,
+          headers: { "Content-Type": "multipart/form-data" },
         }
       );
       console.log(response.data, "edit category response");
@@ -75,6 +75,26 @@ export const editCategory = createAsyncThunk(
     } catch (error) {
       console.log(error, "edit category error");
       return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+// New Async Thunk to update category order
+export const updateCategoryOrder = createAsyncThunk(
+  "category/updateCategoryOrder",
+  async (categoryIds, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `${apiurl}/category/reorder-categories`,
+        {
+          categoryIds,
+        }
+      );
+      return response.data.categories; // Return the updated category list
+    } catch (error) {
+      return rejectWithValue(
+        error.response.data || "Failed to update category order"
+      );
     }
   }
 );
@@ -153,6 +173,21 @@ const categorySlice = createSlice({
       .addCase(editCategory.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload.message;
+      });
+
+    builder
+      // Update Category Order
+      .addCase(updateCategoryOrder.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateCategoryOrder.fulfilled, (state, action) => {
+        state.loading = false;
+        state.categories = action.payload; // Update the categories state with the new order
+      })
+      .addCase(updateCategoryOrder.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });

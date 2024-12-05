@@ -1,152 +1,126 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Button, Grid, TextField, Select, MenuItem, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, } from "@mui/material";
 import { Add, Edit, Delete } from "@mui/icons-material";
 import { NavLink } from "react-router-dom";
 import ProductList from "./ProductList";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 const SellerProductPage = () => {
   // Mock data
-  const [products, setProducts] = useState([
-    {
-      id: 1,
-      name: "Wireless Headphones",
-      category: "Electronics",
-      stock: 15,
-      price: 299.99,
-    },
-    {
-      id: 2,
-      name: "Running Shoes",
-      category: "Fashion",
-      stock: 5,
-      price: 99.99,
-    },
-    {
-      id: 3,
-      name: "Smart Watch",
-      category: "Electronics",
-      stock: 0,
-      price: 199.99,
-    },
-    {
-      id: 4,
-      name: "Sunglasses",
-      category: "Accessories",
-      stock: 20,
-      price: 49.99,
-    },
-  ]);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [search, setSearch] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
 
-  // Filtered Products
+  const apiUrl = import.meta.env.VITE_API_URL;
+
+  useEffect(() => {
+    // Fetch products from API
+    const fetchProducts = async () => {
+      try {
+        const token = Cookies.get("sellertoken");
+        const response = await axios.get(`${apiUrl}/product/getproductsbyseller`, {
+          withCredentials: true,
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setProducts(response.data);
+        console.log(response.data)
+      } catch (err) {
+        setError(err.response?.data?.message || err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
   const filteredProducts = products.filter((product) => {
+    const productName = product.productName || "";
+    const productSkuId = product.skuid || ""; // Ensure skuid exists
+    const searchLower = search.toLowerCase();
+
     return (
-      product.name.toLowerCase().includes(search.toLowerCase()) &&
+      (productName.toLowerCase().includes(searchLower) ||
+        productSkuId.toLowerCase().includes(searchLower)) &&
       (filterCategory ? product.category === filterCategory : true)
     );
   });
+  console.log(filteredProducts)
 
   // Handlers
-  const handleSearchChange = (e) => setSearch(e.target.value);
-  const handleCategoryChange = (e) => setFilterCategory(e.target.value);
+  const handleSearchChange = (e) => {
+    console.log(e.target.value);
+    setSearch(e.target.value);
+  }
+
+  const handleCategoryChange = (e) => {
+    setFilterCategory(e.target.value);
+    console.log(e.target.value);
+
+  }
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div className="text-red-500">{error}</div>;
+  if (products.length === 0) return <div>No products found.</div>;
 
   return (
     <div className="">
-      <div className="">
-        <Box sx={{ p: 3 }}>
-          {/* Overview Section */}
-          <Grid container spacing={3} sx={{ mb: 3 }}>
-            <Grid item xs={12} md={4}>
-              <Box
-                sx={{
-                  p: 3,
-                  borderRadius: 2,
-                  backgroundColor: "#1a73e8",
-                  color: "#fff",
-                  textAlign: "center",
-                }}
-              >
-                <Typography variant="h6">Total Products</Typography>
-                <Typography variant="h4" fontWeight="bold">
-                  {products.length}
-                </Typography>
-              </Box>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <Box
-                sx={{
-                  p: 3,
-                  borderRadius: 2,
-                  backgroundColor: "#28a745",
-                  color: "#fff",
-                  textAlign: "center",
-                }}
-              >
-                <Typography variant="h6">Active Products</Typography>
-                <Typography variant="h4" fontWeight="bold">
-                  {products.filter((product) => product.stock > 0).length}
-                </Typography>
-              </Box>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <Box
-                sx={{
-                  p: 3,
-                  borderRadius: 2,
-                  backgroundColor: "#dc3545",
-                  color: "#fff",
-                  textAlign: "center",
-                }}
-              >
-                <Typography variant="h6">Out of Stock</Typography>
-                <Typography variant="h4" fontWeight="bold">
-                  {products.filter((product) => product.stock === 0).length}
-                </Typography>
-              </Box>
-            </Grid>
-          </Grid>
+      <div className="p-6 space-y-6">
+        {/* Overview Section */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="py-3 bg-blue-600 text-white text-center rounded-lg">
+            <h2 className="text-lg font-medium mb-1">Total Products</h2>
+            <p className="text-2xl mb-1 font-bold">{products.length}</p>
+          </div>
+          <div className="py-3 bg-green-600 text-white text-center rounded-lg">
+            <h2 className="text-lg font-medium mb-1">Active Products</h2>
+            <p className="text-2xl mb-1 font-bold">{products.filter((product) => product.stock > 0).length}</p>
+          </div>
+          <div className="py-3 bg-red-600 text-white text-center rounded-lg">
+            <h2 className="text-lg font-medium mb-1">Out of Stock</h2>
+            <p className="text-2xl mb-1 font-bold">{products.filter((product) => product.stock === 0).length}</p>
+          </div>
+        </div>
 
-          {/* Action and Filter Section */}
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              mb: 3,
-            }}
+        {/* Action and Filter Section */}
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+          {/* Add Product Button */}
+          <NavLink
+            to="/seller/products/select-category"
+            className="bg-gray-600 text-white px-4 py-2 rounded-md shadow-md hover:bg-gray-700 transition no-underline"
           >
-            {/* Add Product Button */}
-            <Button component={NavLink} to='/seller/products/select-category' variant="contained" color="primary" startIcon={<Add />}>
-              Add Product
-            </Button>
+            Add Product
+          </NavLink>
 
-            {/* Search and Filter */}
-            <Box sx={{ display: "flex", gap: 2 }}>
-              <TextField
-                variant="outlined"
-                size="small"
-                placeholder="Search products"
-                value={search}
-                onChange={handleSearchChange}
-              />
-              <Select
-                value={filterCategory}
-                onChange={handleCategoryChange}
-                displayEmpty
-                size="small"
-                sx={{ minWidth: 150 }}
-              >
-                <MenuItem value="">All Categories</MenuItem>
-                <MenuItem value="Electronics">Electronics</MenuItem>
-                <MenuItem value="Fashion">Fashion</MenuItem>
-                <MenuItem value="Accessories">Accessories</MenuItem>
-              </Select>
-            </Box>
-          </Box>
+          {/* Search and Filter */}
+          <div className="flex gap-4 w-full md:w-auto">
+            <input
+              type="text"
+              placeholder="Search products"
+              value={search}
+              onChange={handleSearchChange}
+              className="flex-1 border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-300 focus:outline-none"
+            />
+            <select
+              value={filterCategory}
+              onChange={handleCategoryChange}
+              className="border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-300 focus:outline-none"
+            >
+              <option value="">All Categories</option>
+              {[...new Set(products.map((product) => product.categoryName))].map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
 
-          <ProductList />
-        </Box>
+        {/* Product List */}
+        <ProductList filteredProducts={filteredProducts} filterCategory={filterCategory} />
       </div>
     </div>
   );

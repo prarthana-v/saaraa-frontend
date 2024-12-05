@@ -4,7 +4,7 @@ import "slick-carousel/slick/slick-theme.css";
 import './MainCarousel.css'
 import '../../../styles/universalStyle.css'
 import '../../../../index.css'
-import CarouselCard from './CarouselCard';
+import { FaArrowRightLong } from "react-icons/fa6";
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllProducts, fetchProductsByCategory } from '../../../../State/ProductSlice'
 import { Link } from 'react-router-dom';
@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom';
 const HomeCarousel = ({ sectionName, category }) => {
   console.log(category)
   const dispatch = useDispatch()
-  useSelector((state) => console.log(state.products.productsByCategory))
+  // useSelector((state) => console.log(state.products.productsByCategory))
   const { productsByCategory, loading, errorByCategory } = useSelector((state) => state.products);
 
   useEffect(() => {
@@ -39,47 +39,46 @@ const HomeCarousel = ({ sectionName, category }) => {
 
   return (
     <div className=''>
-      <div className="container-fluid max-lg ">
-        <div className="row my-2 flex justify-between">
-          <div className='col-3'>
-            <h3 className='poppins px-0 ps-2 mb-0'>{sectionName}</h3>
-          </div>
-          <div className='col-2 flex justify-end'>
-            <Link to={`/category/${category}`} className="text-white px-4 py-2 rounded-pill text-md bg-gray-800 font-medium no-underline text-md">
-              View All
-            </Link>
+      <div className="container-fluid max-lg my-5 ">
+        <div className="row mt-2 mb-4 flex justify-between">
+          <div className='col-12 flex justify-center text-center'>
+            <h3 className='ps-3 crimson-pro text-3xl lg:text-4xl tracking-widest fs-400 uppercase mb-0'>{sectionName}</h3>
           </div>
         </div>
 
-        <div className="my-8">
+        <div className="">
           {/* Product Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 lg:px-16">
             {products.map((product, index) => (
-              <a target='_blank' href={`/product/${product._id}`} key={product._id} className="cursor-pointer no-underline">
-                <div key={index} className="relative group border rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition" >
+              <a href={`/product/${product._id}`} key={product._id} className="cursor-pointer no-underline">
+                <div key={index} className="relative group overflow-hidden transition" >
 
                   {/* Image Container */}
-                  <div className="relative h-[350px] overflow-hidden group">
+                  <div className="relative h-[250px] lg:h-[400px] overflow-hidden group">
                     <img
-                      src={product.images?.[0] || '/default-image.jpg'}
+                      src={product.images?.[1] || '/default-image.jpg'}
                       alt={product.productName || 'Product Image'}
                       className="absolute top-0 left-0 w-full h-full object-cover transition-transform duration-700 group-hover:translate-x-full"
                     />
                     <img
-                      src={product.images?.[1] || '/default-image.jpg'}
+                      src={product.images?.[2] || '/default-image.jpg'}
                       alt={product.productName || 'Product Image'}
                       className="absolute top-0 left-0 w-full h-full object-cover transition-transform duration-700 -translate-x-full group-hover:translate-x-0"
                     />
                   </div>
 
                   {/* Product Details */}
-                  <div className="p-3 no-underline text-center">
-                    <h3 className="text-lg font-semibold capitalize mb-1 no-underline">
+                  <div className="pt-3 no-underline text-left">
+                    <h3 className="fs-17 tracking-widest font-semibold uppercase mb-1 text-sec opacity-90 no-underline truncate crimson-pro">
                       {product.productName}
                     </h3>
-                    <div className="my-3">
-                      <p className="roboto  font-medium text-sm">
-                        <span className="pe-2 text-gray-800">Final Price: ₹{product.price}</span> <span className="pe-2 text-gray-800 opacity-60 line-through"> MRP: ₹{product.mrp}</span> <p className="text-teal-800 font-semibold opacity-60"> Save ₹{product.mrp - product.price} ({Math.round(((product.mrp - product.price) / product.mrp) * 100)}% off)</p>
+                    <div className="mt-1">
+                      <p className="roboto font-medium text-sm mb-0">
+                        <span className="pe-2 text-sec opacity-90 tracking-widest uppercase montserrat-a fs-14">Final Price: ₹{product.price}</span>
+
+                        <p className="text-green-800 font-semibold opacity-60 mt-1">
+                          <span className="pe-2 text-gray-800 opacity-60 line-through"> MRP: ₹{product.mrp}</span>
+                          Save ₹{product.mrp - product.price} ({Math.round(((product.mrp - product.price) / product.mrp) * 100)}% off)</p>
                       </p>
 
                     </div>
@@ -88,6 +87,12 @@ const HomeCarousel = ({ sectionName, category }) => {
               </a>
             ))}
           </div>
+        </div>
+
+        <div className='col-12 flex justify-center'>
+          <Link to={`/${category}`} className="montserrat-a  no-underline flex items-center px-5 py-2" style={{ borderColor: 'black', borderWidth: '1px', borderStyle: 'solid' }}>
+            <span className='pe-3 fs-14  uppercase text-gray-800 font-medium'>Shop the Collection</span>  <FaArrowRightLong />
+          </Link>
         </div>
       </div>
     </div>

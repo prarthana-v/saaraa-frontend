@@ -80,7 +80,7 @@ const ProductPage = () => {
         productId: productId,
         quantity: 1,
       }))
-      console.log("cart response of dispatch", result?.payload?.data);
+      console.log("cart response of dispatch", result);
       if (result?.payload?.data?.success === false) {
         localStorage.setItem('redirectAfterLogin', location.pathname);
         // Display a toast with buttons for Login Now or Cancel
@@ -108,9 +108,9 @@ const ProductPage = () => {
           </div>,
           { autoClose: false, closeButton: false } // Keep the toast open until the user interacts
         );
-      } else {
-        toast.success('Product added to cart!');
       }
+      toast.success('Product added to cart!');
+
     } catch (error) {
       console.log(error)
     }
@@ -121,12 +121,12 @@ const ProductPage = () => {
       <Grid container spacing={6}>
         <Grid item xs={12} sx={{ pt: '20px' }}>
           <Typography variant="subtitle1" color="text.secondary" className="italic">
-            {product.categoryName} |
+            {product.categoryName} / {product.subcategoryName} / {product.productName}
           </Typography>
         </Grid>
 
         {/* Thumbnails Section */}
-        <Grid item xs={12} md={2} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+        <Grid item xs={12} md={2} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', alignItems: 'center' }}>
           {product?.images?.map((image, index) => (
             <div key={index} className="cursor-pointer mx-2 ">
               <div className='border w-[5rem] h-[5rem] rounded-lg my-1 overflow-hidden'>

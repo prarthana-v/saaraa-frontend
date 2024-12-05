@@ -3,163 +3,252 @@ import { Link } from "react-router-dom";
 import { ShoppingCart, Search, Close } from "@mui/icons-material";
 import { Drawer, IconButton, Typography, Badge, List, ListItem, ListItemText } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
+import { FaBars } from "react-icons/fa";
+import { FaRegUser } from "react-icons/fa6";
+import { BsHandbag } from "react-icons/bs";
 import { fetchCategories } from "../../../../State/CategorySlice";
 import { CgProfile } from "react-icons/cg";
 import { Avatar } from '@mui/material'
 import { getUserRecord } from "../../../../State/UserAuthSlice";
+import { fetchCartItems } from "../../../../State/CartSlice";
 
 const Navbar = () => {
   const [openCart, setOpenCart] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [openUser, setOpenUser] = useState(false);
   const dispatch = useDispatch()
   const handleCartOpen = () => setOpenCart(true);
   const handleCartClose = () => setOpenCart(false);
+  const toggleUserDropdown = () => {
+    setOpenUser((prev) => !prev); // Toggle the state
+  };
   const { categories } = useSelector((state) => state.category)
+  const { cartItems } = useSelector((state) => state.cart)
   const user = useSelector((state) => state?.userauth?.user?.user?.username);
-  // useSelector((state) => console.log(state.userauth?.user?.user?.username))
+
   const firstInitial = user?.slice(0, 1) || <CgProfile />;
-  // console.log(categories)
-  // Sample categories array
+  const cart = cartItems?.data?.cart
+
+  useSelector((state) => console.log(state))
+  console.log(cart)
+
   useEffect(() => {
     dispatch(getUserRecord())
     dispatch(fetchCategories())
+    dispatch(fetchCartItems())
   }, [dispatch])
-
+  const cartItemsCount = cart?.cartTotalItems;
   return (
-    <div className="w-full bg-navbar fixed top-0 shadow-lg z-50 montserrat-a">
+    <div className="w-full bg-navbar fixed top-0 z-50 montserrat-a">
       <div className="bg-navbar border-b">
-        {/* First Row: Logo, Login, and Become a Seller */}
-        <div className="flex items-center justify-between px-6 py-3 md:justify-around">
-          {/* Logo */}
-          <div className="flex-shrink-0">
-            <Link to="/">
-              <img
-                src="https://res.cloudinary.com/duxafj5j5/image/upload/v1731158192/category/w5siphjkoo9fprtbda4s.png"
-                alt="Saaraa Trends Logo"
-                className="h-[5.5rem]"
-              />
-            </Link>
-          </div>
-
-          <div className="hidden sm:flex sm:w-2/4 px-6 py-2 md:py-3">
-
-            <div className="relative mx-auto w-full">
-              <input
-                type="text"
-                placeholder="Search for products..."
-                className="pl-10 pr-4 py-2 text-md w-full rounded-full border border-gray-300 focus:outline-none focus:ring-1 focus:ring-pprimary"
-              />
-              <Search className="absolute top-2.5 left-3 text-gray-400" />
+        <div className="px-3 lg:px-16">
+          <div className="row flex justify-around items-center py-4">
+            <div className="col-6 col-sm-3 col-md-2 px-4 ">
+              <div className="flex-shrink-0">
+                <Link to="/">
+                  <img
+                    src="https://res.cloudinary.com/duxafj5j5/image/upload/v1731158192/category/w5siphjkoo9fprtbda4s.png"
+                    alt="Saaraa Trends Logo"
+                    className="w-auto h-[5.5rem]"
+                  />
+                </Link>
+              </div>
+            </div>
+            <div className="col-6 d-md-none flex justify-end">
+              <div className="col-3">
+                <div className="text-gray-900">
+                  <FaRegUser />
+                </div>
+              </div>
+              <div className="col-3 d-md-none">
+                <div className="text-gray-900">
+                  <button className="" onClick={toggleUserDropdown}>
+                    <FaBars />
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div className="col-12 col-md-6 px-4 px-md-0 pt-4 pb-3">
+              <div className="relative  w-full">
+                <input
+                  type="text"
+                  placeholder="Search for products..."
+                  className="pl-10 pr-4 py-2 text-md w-full rounded-full border border-gray-300 focus:outline-none focus:ring-1 focus:ring-pprimary"
+                />
+                <Search className="absolute top-2.5 left-3 text-gray-400" />
+              </div>
+            </div>
+            <div className="d-none col-md-3 d-md-flex justify-md-content-end align-items-center">
+              <div className="col-3 col-lg-2">
+                <div className="text-gray-900">
+                  <button className="relative "
+                    onClick={toggleUserDropdown}
+                    aria-expanded={openUser}
+                    aria-haspopup="true"
+                  >
+                    <FaRegUser className="text-xl mt-2" />
+                  </button>
+                </div>
+              </div>
+              <div className="col-3 col-lg-2">
+                <div className="text-gray-900">
+                  <button
+                    className="relative"
+                    onClick={handleCartOpen}
+                  >
+                    <Badge
+                      badgeContent={cartItemsCount}
+                      color="error"
+                      overlap="rectangular"
+                      sx={{
+                        "& .MuiBadge-dot": { fontSize: "14px" },
+                      }}
+                    >
+                      <BsHandbag className="text-xl" />
+                    </Badge>
+                  </button>
+                </div>
+              </div>
+              <div className="d-none col-md-8 d-md-flex ">
+                <Link className="text-sec font-medium montserrat-a fs-15 tracking-wider ">
+                  Become a Seller
+                </Link>
+              </div>
             </div>
           </div>
-
-          {/* Right: Login, Become a Seller, Cart */}
-          <div className="flex xs:gap-1 sm:gap-3 md:gap-4 justify-center items-center">
-            <IconButton className="text-gray-900" onClick={handleCartOpen}>
-              <Badge badgeContent={3} color="error">
-                <ShoppingCart sx={{ color: 'black' }} />
-              </Badge>
-            </IconButton>
-            <Link
-              to="/seller/login"
-              className="hidden lg:flex text-white lg:py-2 lg:px-6 xs:rounded-3xl no-underline bg-gray-800 rounded-sm font-medium hover:bg-gray-700"
-            >
-              Become a Seller
-            </Link>
-
-            {/* Show Login Button if the user is not logged in */}
-            {!user ? (
-              <Link
-                to="/login"
-                className="text-white xs:py-2 xs:px-6 no-underline bg-gray-800 xs:rounded-3xl rounded-sm font-medium hover:bg-gray-700"
-              >
-                Login
-              </Link>
-            ) : (
-              <Link className="no-underline" to={'/profile'}>
-                <Avatar
-                  className="text-white"
-                  sx={{
-                    width: 50,
-                    height: 50,
-                    bgcolor: '#df988f',
-                    paddingBottom: '5px',
-                  }}
-                >
-                  {firstInitial}
-                </Avatar>
-              </Link>
-
-            )}
-          </div>
         </div>
-
-        {/* Second Row: Search Bar */}
-        <div className="sm:hidden px-6 pb-2 pt-3 md:py-3">
-          <div className="relative w-full max-w-3xl mx-auto">
-            <input
-              type="text"
-              placeholder="Search for products..."
-              className="w-full pl-10 pr-4 py-2 text-sm rounded-full border border-gray-300 focus:outline-none focus:ring-1 focus:ring-pprimary"
-            />
-            <Search className="absolute top-2.5 left-3 text-gray-400" />
-          </div>
-        </div>
-
-
-
       </div >
 
-
-
-
-
       {/* Cart Drawer */}
-      <Drawer
-        anchor="right"
-        open={openCart}
-        onClose={handleCartClose}
-        sx={{
-          "& .MuiDrawer-paper": {
-            width: "350px",
-            padding: "20px",
-            backgroundColor: "#fff",
-            borderLeft: "1px solid #ccc",
-          },
-        }}
-      >
-        <IconButton
-          className="absolute top-2 right-2"
-          onClick={handleCartClose}
-        >
-          <Close />
-        </IconButton>
-        <Typography variant="h6" className="font-bold mb-4">
-          Your Cart
-        </Typography>
-        <List>
-          <ListItem>
-            <ListItemText primary="Product 1" secondary="₹ 999" />
-          </ListItem>
-          <ListItem>
-            <ListItemText primary="Product 2" secondary="₹ 1,299" />
-          </ListItem>
-          <ListItem>
-            <ListItemText primary="Product 3" secondary="₹ 799" />
-          </ListItem>
-        </List>
-        <div className="mt-6">
-          <Typography variant="h6" className="font-bold">
-            Total: ₹ 3,097
-          </Typography>
-          <Link
-            to="/cart"
-            className="block w-full bg-green-500 text-white text-center py-2 rounded mt-3 hover:bg-green-600 transition"
-          >
-            View Cart
-          </Link>
+      {openCart && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-end">
+          <div className="w-96 bg-white p-6 rounded-l-xl shadow-lg">
+            {/* Close Button */}
+            <div className="flex justify-between items-center mb-4 ">
+              <h2 className="text-xl font-semibold ">My Cart</h2>
+              <button
+                className="text-center text-gray-700"
+                onClick={handleCartClose}
+              >
+                x
+              </button>
+
+            </div>
+            {/* Cart Drawer Content */}
+            <div>
+              {/* Display cart items here */}
+              <div className="space-y-4">
+                {cartItems?.length === 0 ? (
+                  <div className="flex flex-col mt-10 items-center justify-center text-center ">
+                    <ShoppingCart className="mx-auto text-gray-500" style={{ fontSize: '5rem' }} />
+                    <p className="text-2xl font-semibold mt-6 poppins">Your Cart is Empty</p>
+                    <p className="text-md text-gray-600 mt-2 poppins">
+                      Looks like you haven't added anything to your cart yet.
+                    </p>
+                  </div>
+                ) : (
+
+                  cart?.cartitems.map((item) => (
+                    <div>
+                      <div className="flex items-start space-x-4 p-2 border-b">
+                        {/* Product Image */}
+                        <div className="w-16 h-20">
+                          <img
+                            src={item.productId.images[1]} // Update with the image source
+                            alt={item.productName}
+                            className="w-full h-full object-cover rounded-md"
+                          />
+                        </div>
+
+                        {/* Product Details */}
+                        <div className="flex-1">
+                          <p className="text-lg font-normal text-sm">{item.productName}</p>
+                          <p className="text-sm text-gray-500">QTY : {item.quantity}</p>
+                        </div>
+
+                        {/* Product Price */}
+                        <div className="text-lg font-semibold">
+                          ₹ {item.price} {/* Replace with actual price */}
+                        </div>
+
+
+                      </div>
+                      {/* Cart Total */}
+                      <div className="mt-6 ">
+                        <div className="flex justify-between font-semibold text-lg">
+                          <span>Total Amount :</span>
+                          <span>₹ {cart?.cartTotalAmt}</span>
+                        </div>
+                      </div>
+
+                      {/* Continue Shopping Button */}
+                      <div className="mt-4 flex justify-center ">
+                        <Link
+                          to={'/cart'}
+                          className="px-4 no-underline py-3  bg-pprimary text-white font-medium rounded-sm poppins tracking-wide hover:bg-gray-900 transition-all duration-300"
+                        >
+                          View Cart
+                        </Link>
+                      </div>
+                    </div>
+                  ))
+
+                )}
+              </div>
+            </div>
+
+
+          </div>
         </div>
-      </Drawer >
+      )}
+
+
+      {/* user drawer */}
+      {openUser && (
+        <div className="absolute right-8 top-24 md:right-40 md:top-24 mt-2 w-48 bg-white rounded-md shadow-lg z-50">
+          <ul className="py-2 text-sm text-gray-700">
+            <li>
+              <Link
+                to="/profile"
+                className="block px-4 py-2 hover:bg-gray-100"
+              >
+                My Account
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/login"
+                className="block px-4 py-2 hover:bg-gray-100"
+              >
+                My Login
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/register"
+                className="block px-4 py-2 hover:bg-gray-100"
+              >
+                Register
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/wishlist"
+                className="block px-4 py-2 hover:bg-gray-100"
+              >
+                Wishlist
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/orders"
+                className="block px-4 py-2 hover:bg-gray-100"
+              >
+                Orders
+              </Link>
+            </li>
+          </ul>
+        </div>
+      )}
     </div >
   );
 };

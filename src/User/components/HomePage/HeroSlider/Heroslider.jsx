@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
@@ -6,6 +6,9 @@ import './HeroSlider.css'
 import { GrNext } from "react-icons/gr";
 import { GrPrevious } from "react-icons/gr";
 import heroData from './HerosliderData';
+import { useDispatch } from 'react-redux';
+import axios from 'axios';
+const apiurl = import.meta.env.VITE_API_URL
 
 // Custom Next Arrow
 const NextArrow = (props) => {
@@ -35,6 +38,24 @@ const PrevArrow = (props) => {
 
 const Heroslider = () => {
 
+  const dispatch = useDispatch();
+
+  const [banners, setBanners] = useState([])
+
+  useEffect(() => {
+    const fetchBanners = async () => {
+      try {
+        let response = await axios.get(`${apiurl}/superadmin/banners`)
+        console.log(response.data.banners);
+        setBanners(response?.data?.banners || []);
+      } catch (error) {
+        console.log('failed to fetch banners', error)
+      }
+    }
+    fetchBanners();
+  }, [dispatch])
+
+
   const settings = {
     dots: false,
     infinite: true,
@@ -47,12 +68,12 @@ const Heroslider = () => {
     // prevArrow: <PrevArrow />  // Add custom Previous Arrow
   };
   return (
-    <div className="slider-container mt-[7.5rem]">
+    <div className="slider-container mt-[11rem] lg:mt-[7.5rem]">
 
       <Slider {...settings}>
         {
-          heroData.map((item) => (
-            <div className="slider">
+          banners.map((item) => (
+            <div key={item._id} className="slider">
               <img src={item.image} alt="" className='slider-image' />
             </div>
           ))

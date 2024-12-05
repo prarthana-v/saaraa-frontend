@@ -49,7 +49,7 @@ export const createProduct = createAsyncThunk(
         console.log("token nathi");
       }
       const response = await axios.post(
-        `${apiurl}/products/add-product`,
+        `${apiurl}/product/add-product`,
         productData,
         {
           withCredentials: true,
