@@ -20,12 +20,7 @@ export const fetchProducts = createAsyncThunk(
 
       const response = await axios.get(
         `${apiurl}/product/getproductsbyseller`,
-        {
-          withCredentials: true,
-          headers: {
-            Authorization: `Bearer ${token}`, // Include token
-          },
-        }
+        { withCredentials: true }
       );
       return response.data;
     } catch (error) {
