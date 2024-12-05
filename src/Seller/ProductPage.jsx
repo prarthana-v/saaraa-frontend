@@ -29,6 +29,7 @@ const SellerProductPage = () => {
         setProducts(response.data);
         console.log(response.data, 'prodyucts')
       } catch (err) {
+         console.log(err)
         setError(err.response?.data?.message || err.message);
       } finally {
         setLoading(false);
