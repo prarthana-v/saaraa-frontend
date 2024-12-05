@@ -20,8 +20,6 @@ const SellerProductPage = () => {
     // Fetch products from API
     const fetchProducts = async () => {
       try {
-        const token = Cookies.get("sellertoken");
-        console.log(token, 'token in fetch product');
 
         const response = await axios.get(`${apiUrl}/product/getproductsbyseller`, {
           withCredentials: true,
@@ -29,6 +27,7 @@ const SellerProductPage = () => {
         setProducts(response.data);
         console.log(response.data, 'prodyucts')
       } catch (err) {
+        console.log(err)
         setError(err.response?.data?.message || err.message);
       } finally {
         setLoading(false);
@@ -64,8 +63,8 @@ const SellerProductPage = () => {
   }
 
   if (loading) return <div>Loading...</div>;
-  if (error) return <div className="text-red-500">{error}</div>;
-  if (products.length === 0) return <div>No products found.</div>;
+  if (error) return <div className="text-red-500">{'error'}</div>;
+  if (products?.length === 0) return <div>No products found.</div>;
 
   return (
     <div className="">
