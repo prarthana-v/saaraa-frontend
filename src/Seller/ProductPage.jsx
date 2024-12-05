@@ -21,12 +21,13 @@ const SellerProductPage = () => {
     const fetchProducts = async () => {
       try {
         const token = Cookies.get("sellertoken");
+        console.log(token, 'token in fetch product');
+
         const response = await axios.get(`${apiUrl}/product/getproductsbyseller`, {
           withCredentials: true,
-          headers: { Authorization: `Bearer ${token}` },
         });
         setProducts(response.data);
-        console.log(response.data)
+        console.log(response.data, 'prodyucts')
       } catch (err) {
         setError(err.response?.data?.message || err.message);
       } finally {
