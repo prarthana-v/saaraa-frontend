@@ -61,7 +61,7 @@ const HomeCarousel = ({ sectionName, category }) => {
                       className="absolute top-0 left-0 w-full h-full object-cover transition-transform duration-700 group-hover:translate-x-full"
                     />
                     <img
-                      src={product.images?.[2] || '/default-image.jpg'}
+                      src={product.images?.[0] || '/default-image.jpg'}
                       alt={product.productName || 'Product Image'}
                       className="absolute top-0 left-0 w-full h-full object-cover transition-transform duration-700 -translate-x-full group-hover:translate-x-0"
                     />
