@@ -65,7 +65,7 @@ const SellerProductPage = () => {
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div className="text-red-500">{error}</div>;
-  if (products.length === 0) return <div>No products found.</div>;
+  if (products?.length === 0) return <div>No products found.</div>;
 
   return (
     <div className="">
