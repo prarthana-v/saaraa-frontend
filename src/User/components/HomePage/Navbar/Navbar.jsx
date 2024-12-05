@@ -46,7 +46,7 @@ const Navbar = () => {
               <div className="flex-shrink-0">
                 <Link to="/">
                   <img
-                    src="https://res.cloudinary.com/duxafj5j5/image/upload/v1731158192/category/w5siphjkoo9fprtbda4s.png"
+                    src="https://res.cloudinary.com/duxafj5j5/image/upload/v1733401863/saraa-trends-bg_chr16j.png"
                     alt="Saaraa Trends Logo"
                     className="w-auto h-[5.5rem]"
                   />
@@ -109,7 +109,7 @@ const Navbar = () => {
                 </div>
               </div>
               <div className="d-none col-md-8 d-md-flex ">
-                <Link className="text-sec font-medium montserrat-a fs-15 tracking-wider ">
+                <Link className="text-sec font-medium montserrat-a fs-15 tracking-wider " to={'/seller/login'}>
                   Become a Seller
                 </Link>
               </div>
@@ -206,30 +206,48 @@ const Navbar = () => {
       {openUser && (
         <div className="absolute right-8 top-24 md:right-40 md:top-24 mt-2 w-48 bg-white rounded-md shadow-lg z-50">
           <ul className="py-2 text-sm text-gray-700">
-            <li>
-              <Link
-                to="/profile"
-                className="block px-4 py-2 hover:bg-gray-100"
-              >
-                My Account
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/login"
-                className="block px-4 py-2 hover:bg-gray-100"
-              >
-                My Login
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/register"
-                className="block px-4 py-2 hover:bg-gray-100"
-              >
-                Register
-              </Link>
-            </li>
+            {user ? (
+              <>
+                <li>
+                  <Link
+                    to="/profile"
+                    className="block px-4 py-2 hover:bg-gray-100"
+                  >
+                    My Profile
+                  </Link>
+                </li>
+                <li>
+                  <button
+                    onClick={() => {
+                      // Add logout logic here
+                      console.log("Logout clicked");
+                    }}
+                    className="block w-full text-left px-4 py-2 hover:bg-gray-100 underline"
+                  >
+                    Logout
+                  </button>
+                </li>
+              </>
+            ) : (
+              <>
+                <li>
+                  <Link
+                    to="/login"
+                    className="block px-4 py-2 hover:bg-gray-100"
+                  >
+                    Login
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/register"
+                    className="block px-4 py-2 hover:bg-gray-100"
+                  >
+                    Register
+                  </Link>
+                </li>
+              </>
+            )}
             <li>
               <Link
                 to="/wishlist"
