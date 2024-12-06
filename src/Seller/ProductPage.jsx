@@ -24,15 +24,11 @@ const SellerProductPage = () => {
         const response = await axios.get(`${apiUrl}/product/getproductsbyseller`, {
           withCredentials: true,
         });
-        setProducts(response.data);
-        console.log(response.data, 'prodyucts')
+        setProducts(response.data.products);
+        console.log(response.data.products, 'prodyucts')
       } catch (err) {
-<<<<<<< HEAD
         console.log(err)
-=======
-         console.log(err)
->>>>>>> b26f455efbcb94bab80e53ca76c84516dcb8b3a1
-        setError(err.response?.data?.message || err.message);
+        setError("kai nai");
       } finally {
         setLoading(false);
       }
@@ -67,11 +63,7 @@ const SellerProductPage = () => {
   }
 
   if (loading) return <div>Loading...</div>;
-<<<<<<< HEAD
-  if (error) return <div className="text-red-500">{'error'}</div>;
-=======
   if (error) return <div className="text-red-500">{error}</div>;
->>>>>>> b26f455efbcb94bab80e53ca76c84516dcb8b3a1
   if (products?.length === 0) return <div>No products found.</div>;
 
   return (
