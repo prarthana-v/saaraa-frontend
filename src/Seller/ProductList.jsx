@@ -145,37 +145,37 @@ const apiurl = import.meta.env.VITE_API_URL;
 
 const ProductList = ({ filteredProducts, filterCategory }) => {
   console.log(filteredProducts, filterCategory)
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  // const [products, setProducts] = useState([]);
+  // const [loading, setLoading] = useState(true);
+  // const [error, setError] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null); // For modal
   const [openModal, setOpenModal] = useState(false);
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const token = Cookies.get("sellertoken");
-        if (!token) throw new Error("Token not found!");
+  // useEffect(() => {
+  //   const fetchProducts = async () => {
+  //     try {
+  //       const token = Cookies.get("sellertoken");
+  //       if (!token) throw new Error("Token not found!");
 
-        const response = await axios.get(`${apiurl}/product/getproductsbyseller`, {
-          withCredentials: true,
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+  //       const response = await axios.get(`${apiurl}/product/getproductsbyseller`, {
+  //         withCredentials: true,
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       });
 
-        setProducts(response.data);
-        console.log(response.data)
-      } catch (error) {
-        setError(error.response?.data?.message || error.message);
-        toast.error("Failed to fetch products");
-      } finally {
-        setLoading(false);
-      }
-    };
+  //       setProducts(response.data);
+  //       console.log(response.data)
+  //     } catch (error) {
+  //       setError(error.response?.data?.message || error.message);
+  //       toast.error("Failed to fetch products");
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-    fetchProducts();
-  }, []);
+  //   fetchProducts();
+  // }, []);
 
   const handleViewProduct = (product) => {
     setSelectedProduct(product);
@@ -190,9 +190,9 @@ const ProductList = ({ filteredProducts, filterCategory }) => {
   const truncateDescription = (desc) =>
     desc?.length > 50 ? `${desc.slice(0, 50)}...` : desc;
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div className="text-red-500">{error}</div>;
-  if (products.length === 0) return <div>No products found.</div>;
+  // if (loading) return <div>Loading...</div>;
+  // if (error) return <div className="text-red-500">{error}</div>;
+  // if (products.length === 0) return <div>No products found.</div>;
 
   return (
     <div className="product-list p-4">
