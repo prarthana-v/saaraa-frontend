@@ -22,7 +22,7 @@ const Home = () => {
       <Routes>
         <Route path='/' element={<HomePage />}></Route>
         <Route path='/:categoryName/:subcategoryName' element={<Product />} />
-        <Route path='/categoryName:' element={<Product />} />
+        <Route path='/:categoryName' element={<Product />} />
         <Route path='/product/:productId' element={< ProductPage />} />
         <Route element={<UserProtected />}>
           <Route path='/cart' element={<Cart />} />

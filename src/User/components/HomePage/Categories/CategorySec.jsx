@@ -95,7 +95,7 @@ const CategorySec = () => {
                 </div>
                 <div className='col-2'>
                   <div className='w-full'>
-                    <Link className='montserrat-a  no-underline flex items-center justify-content-center py-2 px-3' style={{ borderColor: 'black', borderWidth: '1px', borderStyle: 'solid' }}>
+                    <Link to={`/${menCategory.categoryName}`} className='montserrat-a  no-underline flex items-center justify-content-center py-2 px-3' style={{ borderColor: 'black', borderWidth: '1px', borderStyle: 'solid' }}>
                       <span className='pe-3 fs-14  uppercase text-gray-800 font-medium'>View all </span>  <FaArrowRightLong />
                     </Link>
                   </div>
