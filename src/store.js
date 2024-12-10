@@ -7,6 +7,7 @@ import productReducer from "./State/ProductSlice";
 import ordersReducer from "./State/OrderSlice";
 import cartReducer from "./State/CartSlice";
 import subcategoryReducer from "./State/SubCategorySlice";
+import SuperAdminReducer from "./State/SuperAdminSlice";
 
 export const Store = configureStore({
   reducer: {
@@ -17,5 +18,6 @@ export const Store = configureStore({
     orders: ordersReducer,
     cart: cartReducer,
     subcategory: subcategoryReducer,
+    superadmin: SuperAdminReducer,
   },
 });

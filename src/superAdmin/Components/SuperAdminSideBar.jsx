@@ -38,16 +38,16 @@ const SuperAdminSideBar = () => {
     },
     {
       id: 3,
-      label: "View Users",
+      label: "Manage Users",
       icon: <FaUsers className="mr-3 text-xl" />,
-      link: "/users",
+      link: "/superadmin/manageusers",
       dropdown: false,
     },
     {
       id: 4,
-      label: "View Sellers",
+      label: "Manage Sellers",
       icon: <FaStore className="mr-3 text-xl" />,
-      link: "/sellers",
+      link: "/superadmin/managesellers",
       dropdown: false,
     },
     {
@@ -68,68 +68,70 @@ const SuperAdminSideBar = () => {
   return (
     <>
       {/* Sidebar */}
-      <div className="bg-gray-800 text-white flex flex-col shadow-md h-[100vh]">
-        {/* Logo Section */}
-        <div className="px-4 py-3 flex justify-center items-center bg-gray-200 border-b border-gray-700">
-          <a href="/superadmin">
-            <img
-              src="https://res.cloudinary.com/duxafj5j5/image/upload/v1731158192/category/w5siphjkoo9fprtbda4s.png"
-              className="w-[5rem] h-[5rem]"
-              alt="Logo"
-            />
-          </a>
-          <h1 className="text-lg mb-0 font-bold text-gray-700 text-center poppins ps-3">
-            Super Admin
-          </h1>
-        </div>
+      <div className="w-[20%] text-white flex flex-col justify-between bg-gray-800 shadow-md h-[100vh] fixed">
+        <div className="div">
+          {/* Logo Section */}
+          <div className="px-4 py-3 flex justify-center items-center bg-gray-200 border-b border-gray-700">
+            <a href="/superadmin">
+              <img
+                src="https://res.cloudinary.com/duxafj5j5/image/upload/v1731158192/category/w5siphjkoo9fprtbda4s.png"
+                className="w-[5rem] h-[5rem]"
+                alt="Logo"
+              />
+            </a>
+            <h1 className="text-lg mb-0 font-bold text-gray-700 text-center poppins ps-3">
+              Super Admin
+            </h1>
+          </div>
 
-        {/* Navigation Links */}
-        <div className="flex-1 overflow-y-auto custom-scrollbar">
-          <ul className="ps-2">
-            {menuItems.map((item) => (
-              <li key={item.id} className="relative">
-                {!item.dropdown ? (
-                  <a
-                    href={item.link}
-                    className="flex items-center p-4 hover:bg-gray-700 transition duration-200 no-underline poppins"
-                  >
-                    {item.icon}
-                    {item.label}
-                  </a>
-                ) : (
-                  <>
-                    <button
-                      onClick={() => toggleDropdown(item.id)}
-                      className="flex items-center p-4 hover:bg-gray-700 transition duration-200 no-underline poppins w-full text-left"
+          {/* Navigation Links */}
+          <div className="overflow-y-auto custom-scrollbar">
+            <ul className="ps-2">
+              {menuItems.map((item) => (
+                <li key={item.id} className="relative">
+                  {!item.dropdown ? (
+                    <a
+                      href={item.link}
+                      className="flex items-center p-4 hover:bg-gray-700 transition duration-200 no-underline poppins"
                     >
                       {item.icon}
-                      <span>{item.label}</span>
-                      <FaChevronDown
-                        className={`ml-auto text-sm transition-transform duration-200 ${openDropdown === item.id ? "rotate-180" : ""
-                          }`}
-                      />
-                    </button>
-                    {openDropdown === item.id && (
-                      <ul className="bg-gray-600 mt-1 rounded-md shadow-lg poppins">
-                        {item.subMenu.map((subItem) => (
-                          <li key={subItem.id}>
-                            <a
-                              href={subItem.link}
-                              className="block px-4 py-2 hover:bg-gray-700 transition duration-200 no-underline text-md"
-                            >
-                              {subItem.label}
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </>
-                )}
-              </li>
-            ))}
-          </ul>
-        </div>
+                      {item.label}
+                    </a>
+                  ) : (
+                    <>
+                      <button
+                        onClick={() => toggleDropdown(item.id)}
+                        className="flex items-center p-4 hover:bg-gray-700 transition duration-200 no-underline poppins w-full text-left"
+                      >
+                        {item.icon}
+                        <span>{item.label}</span>
+                        <FaChevronDown
+                          className={`ml-auto text-sm transition-transform duration-200 ${openDropdown === item.id ? "rotate-180" : ""
+                            }`}
+                        />
+                      </button>
+                      {openDropdown === item.id && (
+                        <ul className="bg-gray-600 mt-1 rounded-md shadow-lg poppins">
+                          {item.subMenu.map((subItem) => (
+                            <li key={subItem.id}>
+                              <a
+                                href={subItem.link}
+                                className="block px-4 py-2 hover:bg-gray-700 transition duration-200 no-underline text-md"
+                              >
+                                {subItem.label}
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
 
+        </div>
         {/* Logout Button */}
         <button className="m-4 p-3 flex items-center justify-center bg-red-600 hover:bg-red-500 text-white rounded-md">
           <FaSignOutAlt className="mr-2" />

@@ -87,16 +87,24 @@ const CategorySec = () => {
           <>
             <div key={menCategory._id} className="col-12 mb-4">
               {/* Category Header */}
-              <div className="mb-3">
-                <p className="ps-3 crimson-pro text-3xl text-4xl tracking-wide uppercase mb-0 text-center">
-                  {menCategory.categoryName}swear
-                </p>
+              <div className='flex justify-content-between mb-4'>
+                <div className="col-2">
+                  <p className="crimson-pro text-3xl text-4xl tracking-wide uppercase mb-0 ps-2">
+                    {menCategory.categoryName}swear
+                  </p>
+                </div>
+                <div className='col-2'>
+                  <div className='w-full'>
+                    <Link className='montserrat-a  no-underline flex items-center justify-content-center py-2 px-3' style={{ borderColor: 'black', borderWidth: '1px', borderStyle: 'solid' }}>
+                      <span className='pe-3 fs-14  uppercase text-gray-800 font-medium'>View all </span>  <FaArrowRightLong />
+                    </Link>
+                  </div>
+                </div>
               </div>
-
               {/* Subcategories (Limited to 4) */}
               <div className="row d-flex flex-wrap">
                 {menSubcategories.map((subcategory) => (
-                  <div key={subcategory._id} className="col-6 flex-start text-center">
+                  <div key={subcategory._id} className="col-4 flex-start text-center">
                     <div>
                       <div className="image-catgeory md:p-1 w-full h-[280px] lg:h-[550px]">
                         <a
@@ -121,11 +129,7 @@ const CategorySec = () => {
             </div>
           </>
         )}
-        <div className=' flex justify-center'>
-          <Link className='montserrat-a  no-underline flex items-center px-5 py-2' style={{ borderColor: 'black', borderWidth: '1px', borderStyle: 'solid' }}>
-            <span className='pe-3 fs-14  uppercase text-gray-800 font-medium'>Shop the Collection</span>  <FaArrowRightLong />
-          </Link>
-        </div>
+
       </div>
     </div>
   )

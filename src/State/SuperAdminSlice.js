@@ -18,20 +18,76 @@ export const loginSuperAdmin = createAsyncThunk(
   }
 );
 
+// Async thunk to fetch users
+export const fetchUsers = createAsyncThunk(
+  "superadmin/fetchUsers",
+  async ({ page, limit }, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        `${apiurl}/superadmin/users?page=${page}&limit=${limit}`,
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(response.data);
+      return response.data.data; // Extract the paginated user data from the response
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "Something went wrong");
+    }
+  }
+);
+
+// Async thunk to fetch users
+export const fetchSellers = createAsyncThunk(
+  "superadmin/fetchSellers",
+  async ({ page, limit }, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        `${apiurl}/superadmin/sellers?page=${page}&limit=${limit}`,
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(response.data, "sellers");
+      return response.data.data; // Extract the paginated user data from the response
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "Something went wrong");
+    }
+  }
+);
+
 // Slice
 const loginSlice = createSlice({
   name: "auth",
   initialState: {
-    user: null,
+    users: {
+      allUsers: [],
+      total: 0,
+      page: 1,
+      totalPages: 1,
+    },
+    sellers: {
+      allSellers: [],
+      total: 0,
+      page: 1,
+      totalPages: 1,
+    },
     token: null, // Load token from cookies
     loading: false,
     error: null,
+    user: {},
   },
   reducers: {
     logout: (state) => {
       state.superadmin = null;
       state.token = null;
       Cookies.remove("token"); // Clear token from cookies
+    },
+    clearUsers: (state) => {
+      state.users = [];
+    },
+    clearSellers: (state) => {
+      state.sellers = [];
     },
   },
   extraReducers: (builder) => {
@@ -49,8 +105,35 @@ const loginSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       });
+
+    builder
+      .addCase(fetchUsers.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchUsers.fulfilled, (state, action) => {
+        state.loading = false;
+        state.users = action.payload;
+      })
+      .addCase(fetchUsers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+    builder
+      .addCase(fetchSellers.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchSellers.fulfilled, (state, action) => {
+        state.loading = false;
+        state.sellers = action.payload;
+      })
+      .addCase(fetchSellers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
   },
 });
 
-export const { logout } = loginSlice.actions;
+export const { logout, clearUsers } = loginSlice.actions;
 export default loginSlice.reducer;

@@ -3,7 +3,7 @@ import { Facebook, Instagram, Twitter, LinkedIn } from "@mui/icons-material";
 
 const Footer = () => {
   return (
-    <div className="bg-utility text-sec py-14">
+    <div className="bg-utility text-sec pt-14">
       <div className="container mx-auto px-6 md:px-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 px-1 montserrat-a ">
           {/* About Us Section */}

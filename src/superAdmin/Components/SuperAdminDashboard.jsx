@@ -9,6 +9,8 @@ import AddSubcategoryForm from '../SubCategoryAdd/AddSubcategoryForm';
 import EditSubcategoryForm from '../SubCategoryAdd/EditSubCategory';
 import BannerPage from '../Banners/BannerPage';
 import AddBannerPage from '../Banners/AddBannerPage';
+import ManageUsers from '../Users/ManageUsers';
+import ManageSellers from '../Sellers/ManageSellers';
 
 const SuperAdminDashboard = () => {
   return (
@@ -26,6 +28,8 @@ const SuperAdminDashboard = () => {
           <Route path='/subcategories/edit/:id' element={<EditSubcategoryForm />} />
           <Route path='/banners' element={<BannerPage />} />
           <Route path='/banners/add' element={<AddBannerPage />} />
+          <Route path='/manageusers' element={<ManageUsers />} />
+          <Route path='/managesellers' element={<ManageSellers />} />
         </Routes>
       </div>
     </div>

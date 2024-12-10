@@ -15,6 +15,8 @@ const HomeCarousel = ({ sectionName, category }) => {
   // useSelector((state) => console.log(state.products.productsByCategory))
   const { productsByCategory, loading, errorByCategory } = useSelector((state) => state.products);
 
+  const [renderedProductIds, setRenderedProductIds] = useState(new Set());
+
   useEffect(() => {
     dispatch(fetchProductsByCategory(category))
     return () => {
@@ -39,16 +41,23 @@ const HomeCarousel = ({ sectionName, category }) => {
 
   return (
     <div className=''>
-      <div className="container-fluid max-lg my-5 ">
+      <div className="container-fluid my-10 lg:my-20 ">
         <div className="row mt-2 mb-4 flex justify-between">
-          <div className='col-12 flex justify-center text-center'>
-            <h3 className='ps-3 crimson-pro text-3xl lg:text-4xl tracking-widest fs-400 uppercase mb-0'>{sectionName}</h3>
+          <div className='col-12 flex justify-between'>
+            <div className='col-5 text-'>
+              <h3 className='crimson-pro text-3xl ps-3 lg:text-4xl tracking-widest fs-400 uppercase mb-0'>{sectionName}</h3>
+            </div>
+            <div className='col-2 flex justify-center'>
+              <Link to={`/${category}`} className="montserrat-a  no-underline flex items-center px-5 py-2" style={{ borderColor: 'black', borderWidth: '1px', borderStyle: 'solid' }}>
+                <span className='pe-3 fs-14  uppercase text-gray-800 font-medium'>View All</span>  <FaArrowRightLong />
+              </Link>
+            </div>
           </div>
         </div>
 
         <div className="">
           {/* Product Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 lg:px-16">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 px-3">
             {products.map((product, index) => (
               <a href={`/product/${product._id}`} key={product._id} className="cursor-pointer no-underline">
                 <div key={index} className="relative group overflow-hidden transition" >
@@ -89,11 +98,7 @@ const HomeCarousel = ({ sectionName, category }) => {
           </div>
         </div>
 
-        <div className='col-12 flex justify-center'>
-          <Link to={`/${category}`} className="montserrat-a  no-underline flex items-center px-5 py-2" style={{ borderColor: 'black', borderWidth: '1px', borderStyle: 'solid' }}>
-            <span className='pe-3 fs-14  uppercase text-gray-800 font-medium'>Shop the Collection</span>  <FaArrowRightLong />
-          </Link>
-        </div>
+
       </div>
     </div>
   )
