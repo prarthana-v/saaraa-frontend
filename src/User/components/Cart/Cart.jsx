@@ -10,6 +10,7 @@ const Cart = () => {
   const dispatch = useDispatch();
 
   const { cartItems } = useSelector((state) => state?.cart)
+  const { items, totalAmount, totalQuantity } = useSelector((state) => state.cart)
   const cart = cartItems?.data?.cart
   console.log(cart);
 
@@ -18,16 +19,12 @@ const Cart = () => {
     dispatch(fetchCartItems())
   }, [dispatch])
 
-
-  const handleCheckOut = () => {
-    navigate(`/checkout?step=2`)
-  }
   return (
     <div className="mt-16 lg:mt-40">
       <div className="grid lg:grid-cols-3 gap-8 px-4 lg:px-16">
         {/* Left side (Cart Items) */}
-        <div className="col-span-2  rounded-lg  pt-0 p-6">
-          {cart?.cartitems?.length === 0 ? (
+        <div className="col-span-2 border bg-white rounded-lg pt-0 p-6 h-[600px] overflow-y-auto">
+          {items.length === 0 ? (
             <div className="flex flex-col mt-10 items-center justify-center text-center ">
               <ShoppingCart className="mx-auto text-gray-500" style={{ fontSize: '5rem' }} />
               <p className="text-2xl font-semibold mt-6 poppins">Your Cart is Empty</p>
@@ -45,21 +42,21 @@ const Cart = () => {
             </div>
           ) : (
             <div>
-              {cart?.cartitems.map((item) => (
-                <CartItem key={item._id} item={item} />
+              {items.map((item, i) => (
+                <CartItem key={i} item={item} />
               ))}
             </div>
           )}
         </div>
 
         {/* Right side (Price Details) */}
-        <div className=" p-6 rounded-lg  sticky top-0 h-[fit-content]">
+        <div className=" p-6 bg-white rounded-lg  sticky top-0 h-[fit-content]">
           <p className="uppercase font-semibold text-sm text-gray-600">Price Details</p>
           <hr className="my-4" />
           <div className="space-y-4">
             <div className="flex justify-between items-center">
               <span className="text-gray-700">Total Price</span>
-              <span className="text-lg font-semibold text-green-600">{cart?.cartTotalAmt}</span>
+              <span className="text-lg font-semibold text-green-600">{totalAmount}</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-gray-700">Total Discount</span>
@@ -67,22 +64,19 @@ const Cart = () => {
             </div>
             <div className="flex justify-between items-center">
               <span className="text-gray-700">Total Cart Items</span>
-              <span className="text-lg font-semibold text-green-600">{cart?.cartTotalItems}</span>
+              <span className="text-lg font-semibold text-green-600">{totalQuantity}</span>
             </div>
             <hr className="my-4" />
             <div className="flex justify-between items-center font-bold text-lg text-black">
               <span>Total Amount</span>
-              <span className="text-lg">{cart?.totalDiscountedPrice}</span>
+              <span className="text-lg">{totalAmount}</span>
             </div>
           </div>
 
-          <div className="mt-6">
-            <button
-              onClick={handleCheckOut}
-              className="w-full py-3 rounded-sm montserrat-a tracking-wide text-white bg-gray-900"
-            >
-              Place Order
-            </button>
+          <div className="mt-3 flex ">
+            <Link to={'/checkout'} className="w-full text-center no-underline py-3 px-4 rounded-sm montserrat-a tracking-wide text-white bg-gray-900">
+              Proceed to Rent
+            </Link>
           </div>
         </div>
       </div>

@@ -14,14 +14,17 @@ const ProductPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { productId } = useParams();
-  console.log(productId)
+  // console.log(productId)
   const [activeImageIndex, setActiveImageIndex] = useState(0); // Active image index
   const [autoSlide, setAutoSlide] = useState(true); // Controls auto sliding
   const product = useSelector((state) => state.products.productDetails);
   const isLoading = useSelector((state) => state.products.loading);
+  const isAuthenticated = useSelector((state) => state.userauth.isAuthenticated);
+  const user = useSelector((state) => state.userauth);
+  // console.log(user)
   const location = useLocation()
   const { cartLoading, cartError } = useSelector((state) => state.cart);
-  // useSelector((state) => console.log(state.cart, state.products.productDetails))
+  // useSelector((state) => console.log(state.cart))
 
   useEffect(() => {
     dispatch(fetchProductDetails(productId));
@@ -76,29 +79,24 @@ const ProductPage = () => {
 
   const handleCart = async () => {
     try {
-      let result = await dispatch(addToCart({
-        productId: productId,
-        quantity: 1,
-      }))
-      console.log("cart response of dispatch", result);
-      if (result?.payload?.data?.success === false) {
-        localStorage.setItem('redirectAfterLogin', location.pathname);
-        // Display a toast with buttons for Login Now or Cancel
+      if (!isAuthenticated) {
+        // If not authenticated, redirect to login
+        localStorage.setItem("redirectAfterLogin", location.pathname); // Save the current path for post-login redirect
         toast.info(
-          <div className='ps-3'>
+          <div className="ps-3">
             <p>You need to be logged in to add items to your cart.</p>
             <button
-              style={{ marginRight: '10px' }}
-              className='btn btn-primary border-0'
+              style={{ marginRight: "10px" }}
+              className="btn btn-primary border-0"
               onClick={() => {
-                navigate('/login'); // Redirect to login page
+                navigate("/login"); // Redirect to login page
                 toast.dismiss(); // Dismiss the toast
               }}
             >
               Login Now
             </button>
             <button
-              className='btn btn-dark border-0'
+              className="btn btn-dark border-0"
               onClick={() => {
                 toast.dismiss(); // Dismiss the toast
               }}
@@ -108,13 +106,28 @@ const ProductPage = () => {
           </div>,
           { autoClose: false, closeButton: false } // Keep the toast open until the user interacts
         );
+        return; // Stop further execution if not authenticated
       }
-      toast.success('Product added to cart!');
 
+      // If authenticated, dispatch the addToCart action
+      let result = await dispatch(
+        addToCart({
+          productId: productId,
+          quantity: 1,
+        })
+      );
+
+      console.log("cart response of dispatch", result);
+      if (result?.payload?.success) {
+        toast.success("Product added to cart!");
+      } else {
+        toast.error("Failed to add product to cart. Please try again.");
+      }
     } catch (error) {
-      console.log(error)
+      console.error("Error adding to cart:", error);
+      toast.error("An error occurred. Please try again later.");
     }
-  }
+  };
 
   return (
     <Box className="px-4 py-6 mt-32">
@@ -247,7 +260,7 @@ const ProductPage = () => {
 
             {/* Action Buttons */}
             <Stack direction="row" spacing={3} className="mt-5">
-              <button className="shine-button" onClick={handleCart} disabled={cartLoading}>
+              <button className="shine-button" onClick={() => handleCart()} disabled={cartLoading}>
                 {cartLoading ? "Adding..." : "Add To Cart"}
               </button>
               {cartError && <p className="text-red-500">{cartError}</p>}
@@ -303,8 +316,8 @@ const ProductPage = () => {
 
       <div className="lg:px-8 lg:mt-20">
         {
-          [1, 1, 1].map((r) => (
-            <ProductReviewCard />
+          [1, 1, 1].map((r, i) => (
+            <ProductReviewCard key={i} />
           ))
         }
       </div>

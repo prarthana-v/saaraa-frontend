@@ -4,9 +4,9 @@ import { fetchAllProducts } from '../../../State/ProductSlice'
 
 const Main = () => {
   const dispatch = useDispatch()
-  useSelector((state) => console.log(state.products))
+  // useSelector((state) => console.log(state.products))
   const { products, loading, error } = useSelector((state) => state.products);
-  console.log(products)
+  // console.log(products)
 
   useEffect(() => {
     dispatch(fetchAllProducts())
@@ -22,6 +22,7 @@ const Main = () => {
 
   // No products available
   if (products.length === 0) return <div>No products found.</div>;
+
   return (
     <div>
 

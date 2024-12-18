@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Button, Table, TableBody, Modal, Typography, TableCell, TableContainer, TableHead, TableRow, Grid, MenuItem, Paper, Box } from '@mui/material';
+import { Button, Table, TableBody, Modal, Typography, TableCell, TableContainer, TablePagination, TableHead, TableRow, Grid, MenuItem, Paper, Box } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -13,16 +13,26 @@ const OrderPage = () => {
   const [order, setOrders] = useState([])
   const [updating, setUpdating] = useState(null);
   const [filterStatus, setFilterStatus] = useState("Pending");
+
   const dispatch = useDispatch()
-  useSelector((state) => console.log(state.orders))
-  const { loading, error, orders } = useSelector((state) => state.orders)
+
+  const { orders, loading, error, page, rowsPerPage, totalPages } = useSelector((state) => state.orders);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
 
+
   useEffect(() => {
-    dispatch(fetchOrders())
-  }, [dispatch]);
+    dispatch(fetchOrders({ page, limit: rowsPerPage }));
+  }, [dispatch, page, rowsPerPage]);
+
+  const handleChangePage = (event, newPage) => {
+    dispatch(fetchOrders({ page: newPage + 1, limit: rowsPerPage })); // Page is 1-based in API
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    dispatch(fetchOrders({ page: 1, limit: parseInt(event.target.value, 10) })); // Reset to page 1
+  };
 
 
   const handleViewDetails = (order) => {
@@ -119,121 +129,109 @@ const OrderPage = () => {
               </TableHead>
               <TableBody>
                 {filteredOrders.map((order) => (
-                  order.Items.map((product, index) => (
-                    <TableRow key={`${order._id}-${product._id}-${index}`}>
-                      {/* Product Image */}
-                      <TableCell>
-                        <img
-                          src={product.productId.images[0]}
-                          alt="Product"
-                          style={{ width: '50px', height: '50px', objectFit: 'cover' }}
-                        />
-                      </TableCell>
-
-                      {/* Product Details */}
-                      <TableCell>
-                        <Box>
-                          <p>{product.productId.productName}</p>
-                          <p className="text-sm opacity-60">
-                            <span>Order ID: </span>
-                            {order._id}
-                          </p>
-                        </Box>
-                      </TableCell>
-
-                      {/* Quantity */}
-                      <TableCell>{product.quantity}</TableCell>
-
-                      {/* Action */}
-
-                      <TableCell rowSpan={order.Items.length} >
-                        {order.status === "Pending" && (
-                          <>
-                            <Button
-                              variant="contained"
-                              color="primary"
-                              onClick={() => handleStatusChange(order._id, "Accepted")}
-                              sx={{ marginRight: 1 }}
-                            >
-                              Accept
-                            </Button>
-                            <Button
-                              variant="outlined"
-                              color="error"
-                              onClick={() => handleStatusChange(order._id, "Cancelled")}
-                            >
-                              Cancel
-                            </Button>
-                          </>
-                        )}
-                        {order.status === "Accepted" && (
-                          <>
-                            <Button
-                              variant="contained"
-                              color="secondary"
-                              onClick={() => handleStatusChange(order._id, "Received Back")}
-                              sx={{ marginRight: 1 }}
-                            >
-                              Received Back
-                            </Button>
-                            <Button
-                              variant="outlined"
-                              color="error"
-                              onClick={() => handleStatusChange(order._id, "Cancelled")}
-                            >
-                              Cancel
-                            </Button>
-                          </>
-                        )}
-                        {order.status === "Received Back" && (
-                          <>
-                            <Button
-                              variant="contained"
-                              color="secondary"
-                              onClick={() => handleStatusChange(order._id, "Pending")}
-                              sx={{ marginRight: 1 }}
-                            >
-                              Pending
-                            </Button>
-                            <Button
-                              variant="outlined"
-                              color="error"
-                              onClick={() => handleStatusChange(order._id, "Accepted")}
-                            >
-                              Cancelled
-                            </Button>
-                          </>
-                        )}
-                        {order.status === "Cancelled" && (
-                          <>
-                            <Button
-                              variant="contained"
-                              color="secondary"
-                              onClick={() => handleStatusChange(order._id, "Pending")}
-                              sx={{ marginRight: 1 }}
-                            >
-                              Pending
-                            </Button>
-                            <Button
-                              variant="outlined"
-                              color="error"
-                              onClick={() => handleStatusChange(order._id, "Accepted")}
-                            >
-                              Accepted
-                            </Button>
-                          </>
-                        )}
-                      </TableCell>
-
-                      <TableCell>
-                        <Button variant='contained' color='secondary' onClick={() => handleViewDetails(order)}>View Details</Button>
+                  <React.Fragment key={order._id}>
+                    {/* Order Row */}
+                    <TableRow style={{ backgroundColor: '#f7f7f7' }}>
+                      <TableCell colSpan={5}>
+                        <Typography variant="h6" fontWeight="bold">
+                          Order ID: {order._id} (Status: {order.status})
+                        </Typography>
                       </TableCell>
                     </TableRow>
-                  ))
+
+                    {/* Product Rows */}
+                    {order.Items.map((product, index) => (
+                      <TableRow key={`${order._id}-${product._id}-${index}`} style={{ borderBottom: 'none' }}>
+                        {/* Product Image */}
+                        <TableCell>
+                          <img
+                            src={product.productId.images[0]}
+                            alt="Product"
+                            style={{ width: '50px', height: '50px', objectFit: 'cover' }}
+                          />
+                        </TableCell>
+
+                        {/* Product Details */}
+                        <TableCell>
+                          <Box>
+                            <p>{product.productId.productName}</p>
+                            <p className="text-sm opacity-60">
+                              <span>Order ID: </span>{order._id}
+                            </p>
+                          </Box>
+                        </TableCell>
+
+                        {/* Quantity */}
+                        <TableCell>{product.quantity}</TableCell>
+
+                        {/* Action */}
+                        <TableCell>
+                          {order.status === "Pending" && (
+                            <>
+                              <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={() => handleStatusChange(order._id, "Accepted")}
+                                sx={{ marginRight: 1 }}
+                              >
+                                Accept
+                              </Button>
+                              <Button
+                                variant="outlined"
+                                color="error"
+                                onClick={() => handleStatusChange(order._id, "Cancelled")}
+                              >
+                                Cancel
+                              </Button>
+                            </>
+                          )}
+                          {order.status === "Accepted" && (
+                            <>
+                              <Button
+                                variant="contained"
+                                color="secondary"
+                                onClick={() => handleStatusChange(order._id, "Received Back")}
+                                sx={{ marginRight: 1 }}
+                              >
+                                Received Back
+                              </Button>
+                              <Button
+                                variant="outlined"
+                                color="error"
+                                onClick={() => handleStatusChange(order._id, "Cancelled")}
+                              >
+                                Cancel
+                              </Button>
+                            </>
+                          )}
+                          {/* Other status checks go here */}
+                        </TableCell>
+
+                        {/* View */}
+                        <TableCell>
+                          <Button variant="contained" color="secondary" onClick={() => handleViewDetails(order)}>
+                            View Details
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </React.Fragment>
                 ))}
               </TableBody>
             </Table>
           </TableContainer>
+
+
+          {/* Pagination Control */}
+          {/* <TablePagination
+            rowsPerPageOptions={[5, 10, 25, 50]}
+            component="div"
+            count={totalPages * rowsPerPage}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          /> */}
 
           {/* Modal for Order Details */}
           <Modal open={isModalOpen} onClose={handleCloseModal}>
@@ -244,11 +242,13 @@ const OrderPage = () => {
                 left: "50%",
                 transform: "translate(-50%, -50%)",
                 width: '80%',
+                height: '90%',
                 bgcolor: "background.paper",
                 border: "2px solid #000",
                 boxShadow: 24,
                 p: 4,
                 borderRadius: 2,
+                overflowY: 'auto'
               }}
             >
               <Typography variant="h5" sx={{ fontWeight: '500' }} className='opacity-60'>

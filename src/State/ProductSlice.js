@@ -102,7 +102,7 @@ export const fetchProductsByCategory = createAsyncThunk(
       const response = await axios.get(
         `${apiurl}/product/by-category?categoryName=${categoryName}`
       );
-      console.log(response.data.data, " by-catgory");
+      // console.log(response.data.data, " by-catgory");
       if (response.data.success === true) {
         return { categoryName, products: response.data.data || [] }; // Use only the "data" array
       } else {

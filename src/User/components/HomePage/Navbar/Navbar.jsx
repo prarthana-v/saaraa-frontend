@@ -16,27 +16,26 @@ const Navbar = () => {
   const [openCart, setOpenCart] = useState(false);
   const [openUser, setOpenUser] = useState(false);
   const dispatch = useDispatch()
-  const handleCartOpen = () => setOpenCart(true);
+  const handleCartOpen = () => {
+    setOpenCart(true)
+    dispatch(fetchCartItems())
+  };
   const handleCartClose = () => setOpenCart(false);
   const toggleUserDropdown = () => {
     setOpenUser((prev) => !prev); // Toggle the state
   };
   const { categories } = useSelector((state) => state.category)
-  const { cartItems } = useSelector((state) => state.cart)
+  const { items, totalAmount, totalQuantity } = useSelector((state) => state.cart)
+  // console.log(items)
   const user = useSelector((state) => state?.userauth?.user?.user?.username);
 
   const firstInitial = user?.slice(0, 1) || <CgProfile />;
-  const cart = cartItems?.data?.cart
-
-  useSelector((state) => console.log(state))
-  console.log(cart)
 
   useEffect(() => {
     dispatch(getUserRecord())
     dispatch(fetchCategories())
-    dispatch(fetchCartItems())
   }, [dispatch])
-  const cartItemsCount = cart?.cartTotalItems;
+
   return (
     <div className="w-full bg-navbar fixed top-0 z-50 montserrat-a">
       <div className="bg-navbar border-b">
@@ -96,7 +95,7 @@ const Navbar = () => {
                     onClick={handleCartOpen}
                   >
                     <Badge
-                      badgeContent={cartItemsCount}
+                      badgeContent={totalQuantity}
                       color="error"
                       overlap="rectangular"
                       sx={{
@@ -120,8 +119,8 @@ const Navbar = () => {
 
       {/* Cart Drawer */}
       {openCart && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-end">
-          <div className="w-96 bg-white p-6 rounded-l-xl shadow-lg">
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-end overflow-y-auto h-full">
+          <div className="w-96 bg-white p-6 rounded-l-xl shadow-lg h-full ">
             {/* Close Button */}
             <div className="flex justify-between items-center mb-4 ">
               <h2 className="text-xl font-semibold ">My Cart</h2>
@@ -137,7 +136,7 @@ const Navbar = () => {
             <div>
               {/* Display cart items here */}
               <div className="space-y-4">
-                {cartItems?.length === 0 ? (
+                {items?.length === 0 ? (
                   <div className="flex flex-col mt-10 items-center justify-center text-center ">
                     <ShoppingCart className="mx-auto text-gray-500" style={{ fontSize: '5rem' }} />
                     <p className="text-2xl font-semibold mt-6 poppins">Your Cart is Empty</p>
@@ -146,53 +145,54 @@ const Navbar = () => {
                     </p>
                   </div>
                 ) : (
+                  <>
+                    {
+                      items.map((item, i) => (
+                        <div key={i}>
+                          <div className="flex items-start space-x-4 p-2 border-b">
+                            {/* Product Image */}
+                            <div className="w-16 h-20">
+                              <img
+                                src={item.productId?.images?.[1]} // Update with the image source
+                                alt={item.productName}
+                                className="w-full h-full object-cover rounded-md"
+                              />
+                            </div>
 
-                  cart?.cartitems.map((item) => (
-                    <div>
-                      <div className="flex items-start space-x-4 p-2 border-b">
-                        {/* Product Image */}
-                        <div className="w-16 h-20">
-                          <img
-                            src={item.productId.images[1]} // Update with the image source
-                            alt={item.productName}
-                            className="w-full h-full object-cover rounded-md"
-                          />
+                            {/* Product Details */}
+                            <div className="flex-1">
+                              <p className="text-lg font-normal text-sm">{item.productName}</p>
+                              <p className="text-sm text-gray-500">QTY : {item.quantity}</p>
+                            </div>
+
+                            {/* Product Price */}
+                            <div className="text-lg font-semibold">
+                              ₹ {item.price} {/* Replace with actual price */}
+                            </div>
+                          </div>
                         </div>
-
-                        {/* Product Details */}
-                        <div className="flex-1">
-                          <p className="text-lg font-normal text-sm">{item.productName}</p>
-                          <p className="text-sm text-gray-500">QTY : {item.quantity}</p>
-                        </div>
-
-                        {/* Product Price */}
-                        <div className="text-lg font-semibold">
-                          ₹ {item.price} {/* Replace with actual price */}
-                        </div>
-
-
-                      </div>
-                      {/* Cart Total */}
-                      <div className="mt-6 ">
-                        <div className="flex justify-between font-semibold text-lg">
-                          <span>Total Amount :</span>
-                          <span>₹ {cart?.cartTotalAmt}</span>
-                        </div>
-                      </div>
-
-                      {/* Continue Shopping Button */}
-                      <div className="mt-4 flex justify-center ">
-                        <Link
-                          to={'/cart'}
-                          className="px-4 no-underline py-3  bg-pprimary text-white font-medium rounded-sm poppins tracking-wide hover:bg-gray-900 transition-all duration-300"
-                        >
-                          View Cart
-                        </Link>
+                      ))
+                    }
+                    {/* Cart Total */}
+                    <div className="mt-6 ">
+                      <div className="flex justify-between font-semibold text-lg">
+                        <span>Total Amount :</span>
+                        <span>₹ {totalAmount}</span>
                       </div>
                     </div>
-                  ))
 
+                    {/* Continue Shopping Button */}
+                    <div className="mt-4 flex justify-center ">
+                      <Link
+                        to={'/cart'}
+                        className="px-4 no-underline py-3  bg-pprimary text-white font-medium rounded-sm poppins tracking-wide hover:bg-gray-900 transition-all duration-300"
+                      >
+                        View Cart
+                      </Link>
+                    </div>
+                  </>
                 )}
+
               </div>
             </div>
 

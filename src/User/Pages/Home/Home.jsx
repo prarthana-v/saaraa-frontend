@@ -7,10 +7,14 @@ import ProductPage from '../../components/ProductsDetails/ProductDetailsPage'
 import Navbar from '../../components/HomePage/Navbar/Navbar'
 import UserProtected from '../protectedPages/userProtected'
 import Cart from '../../components/Cart/Cart'
-import Checkout from '../../components/Checkout/Checkout'
 import Profile from '../../components/auth/login/profile'
 import Order from '../../components/Order/order'
 import OrderDetails from '../../components/Order/OrderDetails'
+import DeliveryAddressForm from '../../components/Checkout/DeliveryAdddressForm'
+import OrderSummary from '../../components/Checkout/OrderSummary'
+import PaymentPage from '../../components/Checkout/PaymentPage'
+import CheckoutPage from '../../components/Checkout/Checkout'
+import OrderConfirmationPage from '../../components/Order/OrderConfirmationPage'
 // import 
 
 const Home = () => {
@@ -26,7 +30,12 @@ const Home = () => {
         <Route path='/product/:productId' element={< ProductPage />} />
         <Route element={<UserProtected />}>
           <Route path='/cart' element={<Cart />} />
-          <Route path='/checkout' element={<Checkout />} />
+          <Route path='/checkout' element={<CheckoutPage />} />
+          <Route path='/checkout/selectaddress' element={<DeliveryAddressForm />} />
+          <Route path='/checkout/ordersummary' element={<OrderSummary />} />
+          <Route path='/checkout/payment' element={<PaymentPage />} />
+          <Route path='/order-confirmation' element={<OrderConfirmationPage />} />
+          <Route />
           <Route path='/profile' element={<Profile />} />
           <Route path='/account/order' element={<Order />} />
           <Route path='/account/order/:orderid' element={<OrderDetails />} />

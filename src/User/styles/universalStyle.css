@@ -193,27 +193,33 @@ body {
   height: 100%;
   transition: all 0.6s ease; /* Longer transition for smooth shine effect */
 }
-.custom-scrollbar-home {
-  scrollbar-width: thin;
-  scrollbar-color: rgb(205, 155, 155) transparent;
-}
 
-.custom-scrollbar-home::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-.custom-scrollbar-home::-webkit-scrollbar-thumb {
-  background-color: #806b7b; /* Gray-500 */
-  border-radius: 4px;
-}
-
-.custom-scrollbar-home::-webkit-scrollbar-track {
-  background-color: transparent;
-}
 .underline-pprimary {
   border-bottom: 2px solid #df988f;
 }
 .bb- {
   border: 1px solid black;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px; /* Width of the scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: #f4f4f4; /* Background of the scrollbar track */
+  border-radius: 4px; /* Rounded edges for the track */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888; /* Color of the scrollbar thumb */
+  border-radius: 4px; /* Rounded edges for the thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Darker color when hovering over the scrollbar */
+}
+
+.bg-pprimary-o50 {
+  background-color: #f9f4f3;
 }

@@ -2,7 +2,20 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 const apiurl = import.meta.env.VITE_API_URL;
-import Cookies from "js-cookie";
+
+const normalizeCartData = (cart) => ({
+  items: cart?.cartitems?.map((item) => ({
+    id: item._id,
+    productId: item.productId,
+    productName: item.productName,
+    price: parseFloat(item.price),
+    quantity: item.quantity,
+    totalPrice: item.totalPrice,
+    discount: item.discount,
+  })),
+  totalAmount: cart.cartTotalAmt,
+  totalQuantity: cart.cartTotalItems,
+});
 
 // Async thunk for adding to cart
 export const addToCart = createAsyncThunk(
@@ -12,15 +25,12 @@ export const addToCart = createAsyncThunk(
       const response = await axios.post(`${apiurl}/cart/add-item`, item, {
         withCredentials: true,
       });
-      if (!response.data.success) {
-        // Assuming response.data contains success property
-        return rejectWithValue("Failed to add item to cart");
-      }
-      console.log("cart response", response.data);
+
       return response.data;
     } catch (error) {
       console.error("Add to cart error:", error);
       // Extracting and returning a simple error message
+      console.log(error, "ddd");
       return rejectWithValue(error.response || "Something went wrong");
     }
   }
@@ -34,8 +44,13 @@ export const fetchCartItems = createAsyncThunk(
       const response = await axios.get(`${apiurl}/cart/getcart`, {
         withCredentials: true,
       }); // Replace with your actual endpoint
-      console.log(response.data, "cart response");
-      return response.data;
+      // console.log("Full API Response", response.data);
+      if (response.data.success) {
+        console.log("Cart fetch response", response.data.data.cart);
+        return response.data.data.cart; // Return the raw cart data
+      } else {
+        return rejectWithValue("Failed to fetch cart items");
+      }
     } catch (error) {
       console.error("Fetch cart items error:", error);
       return rejectWithValue(error.response);
@@ -64,59 +79,58 @@ export const removeCartItem = createAsyncThunk(
   }
 );
 
+// Async thunk for clearing the cart
+export const clearCart = createAsyncThunk(
+  "cart/clearCart",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.delete(`${apiurl}/cart/clearcart`, {
+        withCredentials: true,
+      }); // Replace with your actual API endpoint
+      return response.data.cart; // Return the cleared cart object
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const cartSlice = createSlice({
   name: "cart",
   initialState: {
-    cartItems: [], // Array of cart items
-    totalQuantity: 0,
-    totalPrice: 0,
-    loading: false,
-    error: null, // For storing error messages
+    items: [], // Array of items in the cart
+    totalAmount: 0, // Total price
+    totalQuantity: 0, // Total number of items
+    loading: false, // Loading state
+    error: null, // Error state
   },
   reducers: {
     removeFromCart: (state, action) => {
       const id = action.payload;
-      const existingItem = state.cartItems.find((item) => item.id === id);
+      const existingItem = state.items.find((item) => item.id === id);
       if (existingItem) {
         state.totalQuantity -= existingItem.quantity;
         state.totalPrice -= existingItem.totalPrice;
-        state.cartItems = state.cartItems.filter((item) => item.id !== id);
+        state.items = state.items.filter((item) => item.id !== id);
       }
     },
   },
   extraReducers: (builder) => {
     builder
-      // Pending state
       .addCase(addToCart.pending, (state) => {
         state.loading = true;
-        state.error = null; // Clear any previous errors
+        state.error = null;
       })
-      // Fulfilled state
       .addCase(addToCart.fulfilled, (state, action) => {
-        state.loading = false;
-        const newItem = action.payload;
-        const existingItem = state.cartItems.find(
-          (item) => item.id === newItem.id
-        );
-
-        if (existingItem) {
-          existingItem.quantity += newItem.quantity;
-          existingItem.totalPrice += newItem.price * newItem.quantity;
-        } else {
-          state.cartItems.push({
-            ...newItem,
-            totalPrice: newItem.price * newItem.quantity,
-          });
-        }
-        state.totalQuantity += newItem.quantity;
-        state.totalPrice += newItem.price * newItem.quantity;
-        // Show success toast
+        console.log(action.payload, "ap");
+        const normalizedCart = normalizeCartData(action.payload.cart);
+        console.log(normalizedCart, "nc");
+        state.items = normalizedCart.items;
+        state.totalAmount = normalizedCart.totalAmount;
+        state.totalQuantity = normalizedCart.totalQuantity;
       })
-      // Rejected state
       .addCase(addToCart.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || "Something went wrong";
-        // toast.error(action.payload || "Failed to add item to cart");
+        state.error = action.payload;
       });
 
     // Show error toast
@@ -127,7 +141,10 @@ const cartSlice = createSlice({
       })
       .addCase(fetchCartItems.fulfilled, (state, action) => {
         state.loading = false;
-        state.cartItems = action.payload;
+        const normalizedCart = normalizeCartData(action.payload);
+        state.items = normalizedCart.items;
+        state.totalAmount = normalizedCart.totalAmount;
+        state.totalQuantity = normalizedCart.totalQuantity;
       })
       .addCase(fetchCartItems.rejected, (state, action) => {
         state.loading = false;
@@ -146,6 +163,22 @@ const cartSlice = createSlice({
       .addCase(removeCartItem.rejected, (state, action) => {
         state.status = "failed"; // Set to failed if API call fails
         state.error = action.payload; // Capture the error message
+      });
+
+    builder
+      .addCase(clearCart.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(clearCart.fulfilled, (state) => {
+        state.items = [];
+        state.totalAmount = 0;
+        state.totalQuantity = 0;
+        state.loading = false;
+      })
+      .addCase(clearCart.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });

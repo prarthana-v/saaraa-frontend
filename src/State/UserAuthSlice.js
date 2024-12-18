@@ -61,14 +61,14 @@ export const getUserRecord = createAsyncThunk(
       if (!token) {
         console.log("no token in get user");
       }
-      console.log(token);
+      // console.log(token);
       const response = await axios.get(`${apiurl}/auth/getuser`, {
         withCredentials: true,
         headers: {
           Authorization: `Bearer ${token}`, // Include token
         },
       });
-      console.log("get user response : ", response.data);
+      // console.log("get user response : ", response.data);
       return response.data;
     } catch (error) {
       console.log(error);
@@ -162,6 +162,7 @@ const authSlice = createSlice({
       .addCase(getUserRecord.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload;
+        state.isAuthenticated = true;
       })
       .addCase(getUserRecord.rejected, (state, action) => {
         state.loading = false;

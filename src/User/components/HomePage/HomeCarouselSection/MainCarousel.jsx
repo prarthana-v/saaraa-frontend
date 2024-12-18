@@ -10,7 +10,7 @@ import { fetchAllProducts, fetchProductsByCategory } from '../../../../State/Pro
 import { Link } from 'react-router-dom';
 
 const HomeCarousel = ({ sectionName, category }) => {
-  console.log(category)
+  // console.log(category)
   const dispatch = useDispatch()
   // useSelector((state) => console.log(state.products.productsByCategory))
   const { productsByCategory, loading, errorByCategory } = useSelector((state) => state.products);

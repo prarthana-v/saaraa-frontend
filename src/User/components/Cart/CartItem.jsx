@@ -63,7 +63,7 @@ const CartItem = ({ item }) => {
           </div>
           <div className="ml-9 space-y-1">
             <p className='font-semibold mb-1'>{item.productName}</p>
-            <p className='opacity-70'>Size:</p>
+            <p className='opacity-70'>Size: {item.productId.sizes.join(",")}</p>
             <p className='opacity-70 mt-2'>Seller: Abc Fashion</p>
             <div className="flex space-x-5 items-center text-lg lg:text-xl text-gray-900 mt-6">
               <p className="font-semibold text-gray-900 text-sm montserrat">Price : {item.price}</p>
@@ -85,7 +85,7 @@ const CartItem = ({ item }) => {
                 </span>
               </div>
               <div className="grid-cols-11 justify-start ms-3">
-                <button className='poppins bg-dark text-white py-1 px-2' onClick={() => handleRemoveItem(item._id)}>Remove</button>
+                <button className='montserrat-a text-sm tracking-wide font-semibold' onClick={() => handleRemoveItem(item.id)}>Remove</button>
               </div>
             </div>
           </div>
