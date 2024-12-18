@@ -33,7 +33,7 @@
 
 // export default App
 
-import React from 'react'
+import React, { Suspense } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import CustomerRouter from './Router/CustomerRouter.jsx'
 import SellerRouter from './Router/SellerRouter.jsx'
@@ -48,11 +48,14 @@ const App = () => {
     <div>
       <BrowserRouter>
         <ScrollToTop />
-        <Routes>
-          <Route path='/*' element={<CustomerRouter />}></Route>
-          <Route path='/seller/*' element={<SellerRouter />} />
-          <Route path='/superadmin/*' element={<SuperAdminRouter />} />
-        </Routes>
+        <Suspense fallback={<div className="spinner-container">
+          <div className="spinner"></div></div>}>
+          <Routes>
+            <Route path='/*' element={<CustomerRouter />}></Route>
+            <Route path='/seller/*' element={<SellerRouter />} />
+            <Route path='/superadmin/*' element={<SuperAdminRouter />} />
+          </Routes>
+        </Suspense>
       </BrowserRouter>
       {/* Add ToastContainer here to make it accessible throughout the app */}
       <ToastContainer
