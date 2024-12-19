@@ -36,9 +36,6 @@ export const loginUser = createAsyncThunk(
       console.log(token);
       const response = await axios.post(`${apiurl}/auth/login`, loginData, {
         withCredentials: true,
-        headers: {
-          Authorization: `Bearer ${token}`, // Include token
-        },
       });
       console.log("login user response : ", response.data);
       return response.data;
