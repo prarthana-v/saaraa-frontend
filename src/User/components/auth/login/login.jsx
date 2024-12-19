@@ -29,7 +29,7 @@ const LoginForm = () => {
 
       if (loginUser.fulfilled.match(result)) {
         const token = result.payload.token;
-        console.log("Token:", token);
+        console.log("Token when handlesumbit:", token);
 
         // Check authentication status after login
         const checkAuth = async () => {
