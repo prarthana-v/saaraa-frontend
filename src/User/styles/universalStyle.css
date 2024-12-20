@@ -260,3 +260,23 @@ body {
 .bg-pprimary-o50 {
   background-color: #f9f4f3;
 }
+
+.usermodal {
+  position: absolute;
+  top: 50%;
+  right: 10%;
+}
+@media (min-width: 768px) {
+  .usermodal {
+    position: absolute;
+    top: 100%;
+    right: 4%;
+  }
+}
+@media (min-width: 992px) {
+  .usermodal {
+    position: absolute;
+    top: 100%;
+    right: 2%;
+  }
+}
