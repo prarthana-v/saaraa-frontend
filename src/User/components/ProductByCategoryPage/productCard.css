@@ -1,12 +1,24 @@
-.productCard .textPart {
-  transition: transform 0.3s ease-out;
-}
-
-.productCard:hover .textPart {
-  transform: translateY(-1.5rem);
+.productCard {
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    border 0.3s ease;
 }
 
 .productCard:hover {
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
-    rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+  border: 1px solid #4b4b4b6e; /* Subtle border color change */
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 10px 0px; /* Light shadow for the card */
+}
+
+.productCard img {
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.productCard:hover img {
+  transform: scale(1.06); /* Slight zoom */
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 30px 0px; /* Soft shadow on the image */
 }

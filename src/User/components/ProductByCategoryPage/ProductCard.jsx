@@ -3,15 +3,14 @@ import './productCard.css'
 import { useNavigate } from 'react-router-dom'
 
 const Productcard = ({ product }) => {
-  console.log(product)
-  const navigate = useNavigate('')
+  // console.log(product)
   return (
-    <a href={`/product/${product._id}`} target='_blank' className='no-underline'>
-      <div className="productCard max-w-full  my-3 transition-all cursor-pointer">
-        <div className="h-[20rem]">
+    <a href={`/product/${product._id}`} className='no-underline'>
+      <div className="productCard max-w-full transition-all cursor-pointer">
+        <div className="overflow-hidden h-[25rem]">
           <img src={product.images[0]} className='w-full h-full object-cover object-left-top' alt="" />
         </div>
-        <div className="textPart bg-white p-3">
+        <div className="textPart p-3">
           <div className="">
             <p className='mb-0'>{product.productName}</p>
           </div>

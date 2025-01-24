@@ -110,8 +110,6 @@ const LoginSuperadmin = () => {
       toast.success("Login successful! Please enter the secret key.");
       console.log("Login successful");
       setLoginSuccess(true);
-
-
     } catch (error) {
       console.log("An error occurred during login.", error);
       if (error?.response?.data) {

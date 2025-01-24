@@ -13,6 +13,8 @@ import { getUserRecord } from "../../../../State/UserAuthSlice";
 import { fetchCartItems } from "../../../../State/CartSlice";
 import './navbar.css'
 import SearchWithDropdown from "./SearchWithDropdown.jsx";
+import axios from "axios";
+const apiurl = import.meta.env.VITE_API_URL
 
 const Navbar = () => {
   const [openCart, setOpenCart] = useState(false);
@@ -44,6 +46,20 @@ const Navbar = () => {
     dispatch(fetchCategories());
   }, [dispatch]);
 
+
+  const handleLogout = async () => {
+    try {
+      const response = await axios.post(`${apiurl}/auth/logout`, {}, {
+        withCredentials: true
+      })
+      window.location.reload();
+      console.log(response)
+      // toast.success("logout succesfull");
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <div className="w-full bg-navbar fixed top-0 z-50 montserrat-a">
       <div className="bg-navbar">
@@ -67,7 +83,7 @@ const Navbar = () => {
                     aria-expanded={openUser}
                     aria-haspopup="true"
                   >
-                    <span className="text-xl">{firstInitial}</span>
+                    <FaRegUser className="text-xl" />
                   </button>
                 ) : (
                   <Link to="/login" className="text-gray-900">
@@ -236,80 +252,7 @@ const Navbar = () => {
       )}
 
       {/* User Dropdown */}
-      {/* {openUser && (
-        <div className="usermodal  w-48 bg-white rounded-md shadow-lg z-50">
-          <ul className="py-2 text-sm text-gray-700 ps-0">
-            {user ? (
-              <>
-                <li>
-                  <Link
-                    to="/profile"
-                    className="block px-4 py-2 hover:bg-gray-100"
-                  >
-                    My Profile
-                  </Link>
-                </li>
-                <li>
-                  <button
-                    onClick={() => {
-                      // Add logout logic here
-                      console.log("Logout clicked");
-                    }}
-                    className="block px-4 py-2 hover:bg-gray-100"
-                  >
-                    Logout
-                  </button>
-                </li>
-              </>
-            ) : (
-              <>
 
-                <li>
-                  <Link
-                    to="/register"
-                    className="block px-4 py-2 hover:bg-gray-100"
-                  >
-                    Create New Account
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/profile"
-                    className="block px-4 py-2 hover:bg-gray-100"
-                  >
-                    My Profile
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/orders"
-                    className="block px-4 py-2 hover:bg-gray-100"
-                  >
-                    My Orders
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/cart"
-                    className="block px-4 py-2 hover:bg-gray-100"
-                  >
-                    My Cart
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/seller/register"
-                    className="block px-4 py-2 hover:bg-gray-100"
-                  >
-                    Become a Seller
-                  </Link>
-                </li>
-
-              </>
-            )}
-          </ul>
-        </div>
-      )} */}
       {openUser && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-start md:justify-end transition-all duration-300"
@@ -365,8 +308,7 @@ const Navbar = () => {
                   <li>
                     <button
                       onClick={() => {
-                        console.log("Logout clicked");
-                        setOpenUser(false); // Close the menu
+                        handleLogout(); // Close the menu
                       }}
                       className="block w-full text-left px-4 py-3 hover:bg-gray-100"
                     >

@@ -102,9 +102,34 @@ export const fetchProductsByCategory = createAsyncThunk(
       const response = await axios.get(
         `${apiurl}/product/by-category?categoryName=${categoryName}`
       );
-      // console.log(response.data.data, " by-catgory");
+      console.log(response.data.data, " by-catgory");
       if (response.data.success === true) {
         return { categoryName, products: response.data.data || [] }; // Use only the "data" array
+      } else {
+        return rejectWithValue(response.data.message); // Pass error message to the rejected state
+      }
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const fetchProductsBySubcategory = createAsyncThunk(
+  "products/fetchBySubcategory",
+  async (subcategoryName, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        `${apiurl}/product/by-subcategory?subcategoryName=${subcategoryName}`
+      );
+      console.log(response.data.data, " by-subcatgory");
+      if (response.data.success === true) {
+        const categoryName = response?.data?.data[0].categoryName;
+        // console.log(categoryName);
+        return {
+          categoryName,
+          subcategoryName,
+          products: response.data.data || [],
+        }; // Use only the "data" array
       } else {
         return rejectWithValue(response.data.message); // Pass error message to the rejected state
       }
@@ -119,7 +144,9 @@ const initialState = {
   products: [],
   productDetails: null,
   productsByCategory: {}, // Keyed by category name
+  productsBysubCategory: {}, // Keyed by category name
   errorByCategory: {},
+  categoryName: "",
   loading: false,
   token: null,
   error: null,
@@ -224,6 +251,26 @@ const productSlice = createSlice({
         state.loading = false;
         state.errorByCategory[categoryName] =
           action.payload || action.error.message;
+      });
+
+    builder
+      // Handle pending state
+      .addCase(fetchProductsBySubcategory.pending, (state) => {
+        state.loading = true;
+      })
+      // Handle fulfilled state
+      .addCase(fetchProductsBySubcategory.fulfilled, (state, action) => {
+        const { subcategoryName, products, categoryName } = action.payload;
+        state.productsBysubCategory[subcategoryName] = products; // Store new products for the category
+        state.categoryName = categoryName;
+        state.loading = false;
+        state.error = null;
+      })
+      // Handle rejected state
+      .addCase(fetchProductsBySubcategory.rejected, (state, action) => {
+        console.log("Error Payload:", action.payload);
+        state.loading = false;
+        state.error = action.payload || action.error.message;
       });
   },
 });

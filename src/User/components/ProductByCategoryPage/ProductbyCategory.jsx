@@ -7,13 +7,10 @@ import {
   DisclosureButton,
   DisclosurePanel,
   Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
 } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/react/20/solid'
-import Productcard from '../ProductByCategoryPage/ProductCard.jsx'
+import Productcard from './ProductCard.jsx'
 import { multiplefilters, singlefilter } from './FilterData.js'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { fetchProductsByCategory } from '../../../State/ProductSlice.js';
@@ -31,18 +28,17 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-const Product = () => {
+const ProductbyCategory = () => {
 
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { categoryName } = useParams();
-  console.log(categoryName)
+  // console.log(categoryName)
+
   useSelector((state) => console.log(state.products))
   const { productsByCategory, loading, errorByCategory } = useSelector((state) => state.products);
-
-
-  const [isSticky, setIsSticky] = useState(false);
+  console.log(productsByCategory)
 
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
 
@@ -88,42 +84,12 @@ const Product = () => {
   };
 
   useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth', // Adds smooth scrolling
-    });
-    // dispatch(fetchAllProducts());
     dispatch(fetchProductsByCategory(categoryName))
   }, [dispatch, categoryName]);
 
-  console.log(productsByCategory.men)
-  // const men = productsByCategory.men
-
-  // Handle the scroll event
-  useEffect(() => {
-    const handleScroll = () => {
-      const formElement = document.getElementById("sticky-form");
-      if (formElement) {
-        const rect = formElement.getBoundingClientRect();
-        if (rect.top <= 0) {
-          setIsSticky(true); // Add background color when sticky
-        } else {
-          setIsSticky(false); // Remove background color when not sticky
-        }
-      }
-    };
-
-    // Add scroll event listener
-    window.addEventListener("scroll", handleScroll);
-
-    // Clean up the event listener on component unmount
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
 
   return (
-    <div className="bg-utility mt-[7.5rem]">
+    <div className="bg-utility mt-[6.5rem]">
       {/* Mobile filter dialog */}
       <Dialog open={mobileFiltersOpen} onClose={setMobileFiltersOpen} className="relative lg:hidden mt-40 ">
         <DialogBackdrop
@@ -202,137 +168,126 @@ const Product = () => {
         </div>
       </Dialog>
 
-      {/* Main content */}
-      <main className="mx-auto px-4 sm:px-6 lg:px-8 mt-16">
-        <div className="flex items-baseline justify-between border-b border-gray-200 py-3">
-          <h1 className="fs-36 crimson-pro font-medium tracking-wider uppercase text-sec">
-            {categoryName}'s Collection
-          </h1>
-
-          <div className="flex items-center">
-            <Menu as="div" className="relative inline-block text-left">
-              <div>
-                <MenuButton className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
-                  Sort
-                  <ChevronDownIcon
-                    aria-hidden="true"
-                    className="mr-1 ml-1 h-5 w-5 shrink-0 text-gray-400 group-hover:text-gray-500"
-                  />
-                </MenuButton>
-              </div>
-              <MenuItems
-                transition
-                className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md  shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
-              >
-                <div className="py-1">
-                  {sortOptions.map((option) => (
-                    <MenuItem key={option.name}>
-                      <a
-                        href={option.href}
-                        className={classNames(
-                          option.current ? 'font-medium text-gray-900' : 'text-gray-500',
-                          'block px-4 py-2 text-sm data-[focus]:bg-gray-100 data-[focus]:outline-none',
+      <div className="container mt-5">
+        <div className="row">
+          {/* Header */}
+          <div className="d-flex justify-content-between align-items-center py-3">
+            <h1 className="text-sm italic opacity-60 font-semibold uppercase text-gray-800 mb-0">
+              Home / {categoryName}s
+            </h1>
+            <div className="d-flex align-items-center gap-3">
+              <div className="relative">
+                <Menu>
+                  <Menu.Button className="text-sm text-gray-600 d-flex align-items-center">
+                    Sort
+                    <ChevronDownIcon className="ml-2 h-5 w-5 text-gray-400" />
+                  </Menu.Button>
+                  <Menu.Items className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-lg border border-gray-200">
+                    {sortOptions.map((option) => (
+                      <Menu.Item key={option.name}>
+                        {({ active }) => (
+                          <a
+                            href={option.href}
+                            className={`block px-4 py-2 text-sm ${active ? 'bg-indigo-100 text-indigo-600' : 'text-gray-700'
+                              }`}
+                          >
+                            {option.name}
+                          </a>
                         )}
-                      >
-                        {option.name}
-                      </a>
-                    </MenuItem>
-                  ))}
-                </div>
-              </MenuItems>
-            </Menu>
-
-            <button type="button" className="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7">
-              <span className="sr-only">View grid</span>
-              <Squares2X2Icon aria-hidden="true" className="h-5 w-5" />
-            </button>
-            <button
-              type="button"
-              onClick={() => setMobileFiltersOpen(true)}
-              className="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden"
-            >
-              <span className="sr-only">Filters</span>
-              <FunnelIcon aria-hidden="true" className="h-5 w-5" />
-            </button>
-          </div>
-        </div>
-
-        <section aria-labelledby="products-heading" className="pb-24">
-
-          <div className="col-12 ">
-            {/* Filters (visible on large screens) */}
-            <form className="hidden lg:flex flex-wrap items-center gap-14 py-4 relative border-bottom sticky top-28 bg-utility ">
-              <h5 className="opacity-50 font-bold">Filters:</h5>
-
-              {multiplefilters.map((section) => (
-                <Disclosure key={section.id} as="div" className="relative ">
-                  {({ open }) => (
-                    <>
-                      <Disclosure.Button className="group flex items-center ">
-
-                        <p className='mb-0 montserrat-a text-sec font-medium fs-15 tracking-wide'>{section.name}</p>
-                        <span className="ml-2 flex items-center">
-                          {!open && <PlusIcon aria-hidden="true" className="h-5 w-5 text-gray-400" />}
-                          {open && <MinusIcon aria-hidden="true" className="h-5 w-5 text-gray-400" />}
-                        </span>
-
-                      </Disclosure.Button>
-                      <DisclosureButton>
-                        <button
-                          type="button"
-                          onClick={clearAllFilters}
-                          className="fs-14 montserrat-a text-gray-600 hover:text-gray-900"
-                        >
-                          Clear All Filters
-                        </button>
-                      </DisclosureButton>
-
-                      {open && (
-                        <Disclosure.Panel
-                          className="absolute top-full left-0 shadow-lg z-50 p-6 bg-utility "
-                        >
-                          <div className="col-6 flex flex-column gap-4 ">
-                            {section.options.map((option, optionIdx) => (
-                              <div key={option.value} className="flex items-center">
-                                <input
-                                  defaultValue={option.value}
-                                  defaultChecked={option.checked}
-                                  id={`filter-${section.id}-${optionIdx}`}
-                                  name={`${section.id}[]`}
-                                  type="checkbox"
-                                  onChange={(e) => handleFilter(section.id, option.value, e.target.checked)}
-                                  className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                                />
-                                <label htmlFor={`filter-${section.id}-${optionIdx}`} className="ml-2 text-sm text-gray-600">
-                                  {option.label}
-                                </label>
-                              </div>
-                            ))}
-                          </div>
-                        </Disclosure.Panel>
-                      )}
-                    </>
-                  )}
-                </Disclosure>
-              ))}
-            </form>
-
-            {/* Product grid */}
-            <div className="col-12">
-              <div className="col-12 col-sm-6 col-lg-3">
-                {productsByCategory[categoryName]?.map((product, i) => (
-                  <Productcard key={product._id || i} product={product} />
-                ))}
+                      </Menu.Item>
+                    ))}
+                  </Menu.Items>
+                </Menu>
               </div>
+              <button className="p-2 text-gray-400 hover:text-gray-500">
+                <Squares2X2Icon className="h-5 w-5" />
+              </button>
+              <button
+                type="button"
+                className="lg:hidden p-2 text-gray-400 hover:text-gray-500"
+                onClick={() => setMobileFiltersOpen(true)}
+              >
+                <FunnelIcon className="h-5 w-5" />
+              </button>
             </div>
           </div>
-        </section>
-      </main>
+
+        </div>
+        <div className="row">
+          {/* Filter Sidebar */}
+          <aside className="col-lg-3 col-md-4 mb-4">
+            <div className=" p-4 rounded-lg border border-gray-300 sticky top-16">
+              <h2 className="text-lg font-bold mb-4">Filters</h2>
+              <form className="space-y-6">
+                {multiplefilters.map((section) => (
+                  <Disclosure key={section.id} as="div" className="border-b border-gray-300 pb-4">
+                    {({ open }) => (
+                      <>
+                        <Disclosure.Button className="flex justify-between items-center w-full text-left text-gray-700 hover:text-pprimary">
+                          <span className="text-md font-medium">{section.name}</span>
+                          <span className="ml-2">
+                            {!open ? (
+                              <PlusIcon className="h-5 w-5 text-gray-400" />
+                            ) : (
+                              <MinusIcon className="h-5 w-5 text-gray-400" />
+                            )}
+                          </span>
+                        </Disclosure.Button>
+                        <Disclosure.Panel className="mt-2 space-y-3">
+                          {section.options.map((option, idx) => (
+                            <div key={idx} className="flex items-center">
+                              <input
+                                type="checkbox"
+                                id={`filter-${section.id}-${option.value}`}
+                                name={`${section.id}[]`}
+                                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                defaultChecked={option.checked}
+                                onChange={(e) =>
+                                  handleFilter(section.id, option.value, e.target.checked)
+                                }
+                              />
+                              <label
+                                htmlFor={`filter-${section.id}-${option.value}`}
+                                className="ml-3 text-sm text-gray-600"
+                              >
+                                {option.label}
+                              </label>
+                            </div>
+                          ))}
+                        </Disclosure.Panel>
+                      </>
+                    )}
+                  </Disclosure>
+                ))}
+                <button
+                  type="button"
+                  onClick={clearAllFilters}
+                  className="text-sm text-red-600 tracking-wider poppins hover:underline"
+                >
+                  Clear All Filters
+                </button>
+              </form>
+            </div>
+          </aside>
+          {/* Main Content */}
+          <main className="col-lg-9 col-md-8">
+            {/* Product Grid */}
+            <div className="row">
+              {productsByCategory[categoryName]?.map((product, idx) => (
+                <div className="col-6 col-sm-6 col-md-4  mb-4" key={product._id || idx}>
+                  <Productcard product={product} />
+                </div>
+              ))}
+            </div>
+          </main>
+        </div>
+      </div>
+
     </div>
 
   )
 }
-export default Product
+export default ProductbyCategory
 // import { useState, useEffect } from 'react'
 // // import { XMarkIcon } from '@heroicons/react/24/outline'
 // import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/react/20/solid'

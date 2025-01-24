@@ -12,7 +12,7 @@ const CategorySec = () => {
   const dispatch = useDispatch();
   const { categories } = useSelector((state) => state.category)
   const { subcategories } = useSelector((state) => state.subcategory)
-  console.log(categories, subcategories);
+  // console.log(categories, subcategories);
 
   useEffect(() => {
     dispatch(fetchCategories())

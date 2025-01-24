@@ -1,9 +1,11 @@
 import React, { lazy, Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom'
 
+const ProductBySubcategory = lazy(() => import('../../components/ProductByCategoryPage/ProductBySubcategory'))
+const ProductbyCategory = lazy(() => import('../../components/ProductByCategoryPage/ProductbyCategory'));
 const Footer = lazy(() => import('../../components/HomePage/Footer/Footer'));
 const HomePage = lazy(() => import('./HomePage'));
-const Product = lazy(() => import('../../components/ProductByCategoryPage/Product'));
+const Product = lazy(() => import('../../components/ProductByCategoryPage/ProductbyCategory'));
 const ProductPage = lazy(() => import('../../components/ProductsDetails/ProductDetailsPage'));
 const Navbar = lazy(() => import('../../components/HomePage/Navbar/Navbar'));
 const UserProtected = lazy(() => import('../protectedPages/userProtected'));
@@ -28,8 +30,8 @@ const Home = () => {
         <div className="spinner"></div></div>}>
         <Routes>
           <Route path='/' element={<HomePage />}></Route>
-          <Route path='/:categoryName/:subcategoryName' element={<Product />} />
-          <Route path='/:categoryName' element={<Product />} />
+          <Route path='/:categoryName/:subcategoryName' element={<ProductBySubcategory />} />
+          <Route path='/:categoryName' element={<ProductbyCategory />} />
           <Route path='/product/:productId' element={< ProductPage />} />
           <Route element={<UserProtected />}>
             <Route path='/cart' element={<Cart />} />
