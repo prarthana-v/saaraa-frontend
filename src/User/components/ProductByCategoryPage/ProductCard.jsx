@@ -7,7 +7,7 @@ const Productcard = ({ product }) => {
   return (
     <a href={`/product/${product._id}`} className='no-underline'>
       <div className="productCard max-w-full transition-all cursor-pointer">
-        <div className="overflow-hidden h-[25rem]">
+        <div className="overflow-hidden sm:h-[21rem] md:h-[20rem] lg:h-[22rem] xl:h-[25rem]">
           <img src={product.images[0]} className='w-full h-full object-cover object-left-top' alt="" />
         </div>
         <div className="textPart p-3">

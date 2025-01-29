@@ -9,6 +9,7 @@ import SelectCategoryPage from './SelectCategory.jsx';
 import { Inventory } from '@mui/icons-material';
 import InventoryPage from './Inventory/InventoryPage.jsx';
 import OrderPage from './OrderPage.jsx';
+import SellerProductPage from './ProductPage.jsx';
 
 const Seller = () => {
 
@@ -22,7 +23,7 @@ const Seller = () => {
         <div className='w-[84%]'>
           <Routes>
             <Route path="/" element={<Dashboard />} />
-            <Route path="/products" element={<ProductPage />} />
+            <Route path="/products" element={<SellerProductPage />} />
             <Route path='/inventory' element={<InventoryPage />} />
             <Route path='/orders' element={<OrderPage />} />
           </Routes>

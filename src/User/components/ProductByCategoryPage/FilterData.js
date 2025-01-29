@@ -3,12 +3,12 @@ const multiplefilters = [
     id: "color",
     name: "Color",
     options: [
-      { value: "white", label: "White", checked: false },
-      { value: "black", label: "Black", checked: false },
-      { value: "blue", label: "Blue", checked: false },
-      { value: "red", label: "Red", checked: false },
-      { value: "green", label: "Green", checked: false },
-      { value: "yellow", label: "Yellow", checked: false },
+      { value: "White", label: "White", checked: false },
+      { value: "Black", label: "Black", checked: false },
+      { value: "Blue", label: "Blue", checked: false },
+      { value: "Red", label: "Red", checked: false },
+      { value: "Green", label: "Green", checked: false },
+      { value: "Yellow", label: "Yellow", checked: false },
     ],
   },
   {

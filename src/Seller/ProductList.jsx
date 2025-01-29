@@ -69,8 +69,8 @@ const ProductList = ({ filteredProducts, filterCategory }) => {
                 <TableCell className="text-center">
                   <Button
                     variant="outlined"
-                    color="error"
-                    disabled
+                    color="secondary"
+                    // disabled
                     className="capitalize"
                   >
                     {product.status}

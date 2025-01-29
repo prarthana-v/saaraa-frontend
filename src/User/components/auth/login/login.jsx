@@ -138,7 +138,7 @@ const LoginForm = () => {
 
           {/* Forgot Password Link */}
           <div className="flex justify-between items-center mb-6">
-            <Link href="#" className="text-teal-500 text-sm hover:underline">
+            <Link to={'/password/forgot'} className="text-teal-500 text-sm hover:underline">
               Forgot Password?
             </Link>
           </div>

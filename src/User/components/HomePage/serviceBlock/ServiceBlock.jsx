@@ -26,7 +26,7 @@ const ServiceBlock = () => {
   ];
 
   return (
-    <section className="py-md-12 my-lg-5">
+    <section className="py-md-12 my-5">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
           {services.map((service, index) => (

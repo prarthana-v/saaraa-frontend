@@ -47,9 +47,9 @@ const HomeCarousel = ({ sectionName, category }) => {
             <div className='col-5 text-'>
               <h3 className='crimson-pro text-3xl ps-3 lg:text-4xl tracking-widest fs-400 uppercase mb-0'>{sectionName}</h3>
             </div>
-            <div className='col-2 flex justify-center'>
-              <Link to={`/${category}`} className="montserrat-a  no-underline flex items-center px-5 py-2" style={{ borderColor: 'black', borderWidth: '1px', borderStyle: 'solid' }}>
-                <span className='pe-3 fs-14  uppercase text-gray-800 font-medium'>View All</span>  <FaArrowRightLong />
+            <div className='col-3 flex justify-center'>
+              <Link to={`/${category}`} className="montserrat-a w-full no-underline flex justify-center items-center px-1 py-md-2" style={{ borderColor: 'black', borderWidth: '1px', borderStyle: 'solid' }}>
+                <span className='pe-md-3 text-[10px] md:text-sm  uppercase text-gray-800 font-medium'>View All</span>  <FaArrowRightLong className='hidden md:flex' />
               </Link>
             </div>
           </div>

@@ -87,16 +87,16 @@ const CategorySec = () => {
           <>
             <div key={menCategory._id} className="col-12 mb-4">
               {/* Category Header */}
-              <div className='flex justify-content-between mb-4'>
-                <div className="col-2">
-                  <p className="crimson-pro text-3xl text-4xl tracking-wide uppercase mb-0 ps-2">
+              <div className='flex justify-content-between align-center mb-4'>
+                <div className="col-6 col-lg-2">
+                  <p className="crimson-pro text-3xl  tracking-wide uppercase mb-0 ps-2">
                     {menCategory.categoryName}swear
                   </p>
                 </div>
-                <div className='col-2'>
-                  <div className='w-full'>
-                    <Link to={`/${menCategory.categoryName}`} className='montserrat-a  no-underline flex items-center justify-content-center py-2 px-3' style={{ borderColor: 'black', borderWidth: '1px', borderStyle: 'solid' }}>
-                      <span className='pe-3 fs-14  uppercase text-gray-800 font-medium'>View all </span>  <FaArrowRightLong />
+                <div className='col-4 col-lg-2 flex jusify-content-center'>
+                  <div className='w-full flex justify-center '>
+                    <Link to={`/${menCategory.categoryName}`} className='montserrat-a  no-underline flex items-center justify-content-center px-2 py-md-2 px-md-3' style={{ borderColor: 'black', borderWidth: '1px', borderStyle: 'solid' }}>
+                      <span className='pe-md-3 text-[10px] uppercase text-gray-800 font-medium'>View all </span>  <FaArrowRightLong className='hidden md:flex' />
                     </Link>
                   </div>
                 </div>
@@ -104,9 +104,9 @@ const CategorySec = () => {
               {/* Subcategories (Limited to 4) */}
               <div className="row d-flex flex-wrap">
                 {menSubcategories.map((subcategory) => (
-                  <div key={subcategory._id} className="col-4 flex-start text-center">
+                  <div key={subcategory._id} className="col-6 col-md-4 flex-start text-center">
                     <div>
-                      <div className="image-catgeory md:p-1 w-full h-[280px] lg:h-[550px]">
+                      <div className="image-catgeory md:p-1 w-full h-[200px] sm:h-[360px] md:h-[320px] lg:h-[550px]">
                         <a
                           href={`/${menCategory.categoryName}/${subcategory.subcategoryName}`}
                           className="no-underline"

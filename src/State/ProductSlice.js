@@ -116,19 +116,23 @@ export const fetchProductsByCategory = createAsyncThunk(
 
 export const fetchProductsBySubcategory = createAsyncThunk(
   "products/fetchBySubcategory",
-  async (subcategoryName, { rejectWithValue }) => {
+  async ({ subcategoryName, filters }, { rejectWithValue }) => {
     try {
+      const queryParams = new URLSearchParams({
+        subcategoryName,
+        ...filters,
+      }).toString();
       const response = await axios.get(
-        `${apiurl}/product/by-subcategory?subcategoryName=${subcategoryName}`
+        `${apiurl}/product/by-subcategory?${queryParams}`
       );
-      console.log(response.data.data, " by-subcatgory");
+      console.log(response.data.data, "filtered by subcategory");
+
       if (response.data.success === true) {
-        const categoryName = response?.data?.data[0].categoryName;
-        // console.log(categoryName);
+        const categoryName = response?.data?.data[0].categoryName || null;
         return {
           categoryName,
           subcategoryName,
-          products: response.data.data || [],
+          products: response?.data?.data || [],
         }; // Use only the "data" array
       } else {
         return rejectWithValue(response.data.message); // Pass error message to the rejected state
