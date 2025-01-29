@@ -4,7 +4,7 @@ import axios from 'axios';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 const apiurl = import.meta.env.VITE_API_URL;
-import './ResetPassword.css';
+import './resetPassword.css';
 
 function ResetPassword() {
   const [newPassword, setNewPassword] = useState('');
